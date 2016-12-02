@@ -1,0 +1,118 @@
+var input;
+input = [
+    'LURLLLLLDUULRDDDRLRDDDUDDUULLRLULRURLRRDULUUURDUURLRDRRURUURUDDRDLRRLDDDDLLDURLDUUUDRDDDLULLDDLRLRRRLDLDDDDDLUUUDLUULRDUDLDRRRUDUDDRULURULDRUDLDUUUDLUDURUURRUUDRLDURRULURRURUUDDLRLDDDDRDRLDDLURLRDDLUDRLLRURRURRRURURRLLRLDRDLULLUDLUDRURDLRDUUDDUUDRLUDDLRLUDLLURDRUDDLRURDULLLUDDURULDRLUDLUDLULRRUUDDLDRLLUULDDURLURRRRUUDRUDLLDRUDLRRDUDUUURRULLDLDDRLUURLDUDDRLDRLDULDDURDLUUDRRLDRLLLRRRDLLLLURDLLLUDRUULUULLRLRDLULRLURLURRRDRLLDLDRLLRLULRDDDLUDDLLLRRLLLUURLDRULLDURDLULUDLRLDLUDURLLLURUUUDRRRULRDURLLURRLDLRLDLDRRUUDRDDDDDRDUUDULUL',
+    'RRURLURRULLUDUULUUURURULLDLRLRRULRUDUDDLLLRRRRLRUDUUUUDULUDRULDDUDLURLRRLLDLURLRDLDUULRDLLLDLLULLURLLURURULUDLDUDLUULDDLDRLRRUURRRLLRRLRULRRLDLDLRDULDLLDRRULRDRDUDUUUDUUDDRUUUDDLRDULLULDULUUUDDUULRLDLRLUUUUURDLULDLUUUULLLLRRRLDLLDLUDDULRULLRDURDRDRRRDDDLRDDULDLURLDLUDRRLDDDLULLRULDRULRURDURRUDUUULDRLRRUDDLULDLUULULRDRDULLLDULULDUDLDRLLLRLRURUDLUDDDURDUDDDULDRLUDRDRDRLRDDDDRLDRULLURUDRLLUDRLDDDLRLRDLDDUULRUDRLUULRULRLDLRLLULLUDULRLDRURDD',
+    'UUUUUURRDLLRUDUDURLRDDDURRRRULRLRUURLLLUULRUDLLRUUDURURUDRDLDLDRDUDUDRLUUDUUUDDURRRDRUDDUURDLRDRLDRRULULLLUDRDLLUULURULRULDRDRRLURULLDURUURDDRDLLDDDDULDULUULLRULRLDURLDDLULRLRRRLLURRLDLLULLDULRULLDLRULDDLUDDDLDDURUUUURDLLRURDURDUUDRULDUULLUUULLULLURLRDRLLRULLLLRRRRULDRULLUURLDRLRRDLDDRLRDURDRRDDDRRUDRLUULLLULRDDLDRRLRUDLRRLDULULRRDDURULLRULDUDRLRUUUULURLRLRDDDUUDDULLULLDDUDRLRDDRDRLDUURLRUULUULDUDDURDDLLLURUULLRDLRRDRDDDUDDRDLRRDDUURDUULUDDDDUUDDLULLDRDDLULLUDLDDURRULDUDRRUURRDLRLLDDRRLUUUDDUUDUDDDDDDDLULURRUULURLLUURUDUDDULURDDLRDDRRULLLDRRDLURURLRRRDDLDUUDR',
+    'URLLRULULULULDUULDLLRDUDDRRLRLLLULUDDUDLLLRURLLLLURRLRRDLULRUDDRLRRLLRDLRRULDLULRRRRUUDDRURLRUUDLRRULDDDLRULDURLDURLRLDDULURDDDDULDRLLUDRULRDDLUUUDUDUDDRRUDUURUURLUUULRLULUURURRLRUUULDDLURULRRRRDULUDLDRLLUURRRLLURDLDLLDUDRDRLLUDLDDLRLDLRUDUULDRRLLULDRRULLULURRLDLUUDLUDDRLURDDUDRDUDDDULLDRUDLRDLRDURUULRRDRUUULRUURDURLDUDRDLLRUULUULRDDUDLRDUUUUULDDDDDRRULRURLLRLLUUDLUDDUULDRULDLDUURUDUDLRULULUULLLLRLULUDDDRRLLDRUUDRLDDDRDDURRDDDULURDLDLUDDUULUUURDULDLLULRRUURDDUDRUULDLRLURUDLRDLLLDRLDUURUDUDRLLLDDDULLUDUUULLUUUDLRRRURRRRRDUULLUURRDUU',
+    'UDULUUDLDURRUDDUDRDDRRUULRRULULURRDDRUULDRLDUDDRRRRDLRURLLLRLRRLLLULDURRDLLDUDDULDLURLURUURLLLDUURRUUDLLLUDRUDLDDRLRRDLRLDDDULLRUURUUUDRRDLLLRRULDRURLRDLLUDRLLULRDLDDLLRRUDURULRLRLDRUDDLUUDRLDDRUDULLLURLRDLRUUDRRUUDUDRDDRDRDDLRULULURLRULDRURLURLRDRDUUDUDUULDDRLUUURULRDUDRUDRULUDDULLRDDRRUULRLDDLUUUUDUDLLLDULRRLRDDDLULRDUDRLDLURRUUDULUDRURUDDLUUUDDRLRLRLURDLDDRLRURRLLLRDRLRUUDRRRLUDLDLDDDLDULDRLURDURULURUDDDUDUULRLLDRLDDDDRULRDRLUUURD'
+];
+
+
+console.log("digits in the code:", input.length);
+
+// for each number directions: L, U, R, D
+// first part
+switch (process.argv[2]) {
+    case '2':
+        //second part
+        var diffs = {
+            1: [0, 0, 0, 2],
+            2: [0, 0, 1, 4],
+            3: [-1, -2, 1, 4],
+            4: [-1, 0, 0, 4],
+            5: [0, 0, 1, 0],
+            6: [-1, -4, 1, 'A'],
+            7: [-1, -4, 1, 'B'],
+            8: [-1, -4, 1, 'C'],
+            9: [-1, 0, 0, 0],
+            'A': [0, '6', 'B', 0],
+            'B': ['A', '7', 'C', 'D'],
+            'C': ['B', '8', 0, 0],
+            'D': [0, 'B', 0, 0]
+        };
+        break;
+
+    default:
+    case '1':
+        //first part
+        var diffs = {
+            1: [0, 0, 1, 3],
+            2: [-1, 0, 1, 3],
+            3: [-1, 0, 0, 3],
+            4: [0, -3, 1, 3],
+            5: [-1, -3, 1, 3],
+            6: [-1, -3, 0, 3],
+            7: [0, -3, 1, 0],
+            8: [-1, -3, 1, 0],
+            9: [-1, -3, 0, 0]
+        };
+        break;
+}
+
+if (process.argv[3] === 'test') {
+    //testing
+    input = [
+        'ULL',
+        'RRDDD',
+        'LURDL',
+        'UUUUD'
+    ];
+}
+
+var char, line, code, diff;
+var result = [];
+
+code = 5;
+for (var i=0; i < input.length; i++) {
+    line = input[i];
+    console.log("----code=", code);
+    for (var j=0; j < line.length; j++) {
+        char = line[j];
+        switch (char) {
+            case 'L':
+                diff = diffs[code][0];
+                break;
+
+            case 'U':
+                diff = diffs[code][1];
+                break;
+            
+            case 'R':
+                diff = diffs[code][2];
+                break;
+            
+            case 'D':
+                diff = diffs[code][3];
+                break;
+            
+            default:
+                throw 'bad char from isntructions:' + char;
+        }
+        console.log("diff for " + char + " is " + diff);
+        switch (true) {
+            case diff === 0:
+                // code does not change
+                break;
+                
+            case typeof diff == 'number' && typeof code == 'number':
+                code = code + diff;
+                break;
+
+            case typeof diff == 'string':
+                if (isNaN(parseInt(diff))) {
+                    // true string
+                    code = diff;
+                } else {
+                    // numeric string
+                    code = parseInt(diff);
+                }
+                break;
+                
+            default:
+                throw 'unacceptable instructions: code=' + code + ', diff=' + diff;
+        }
+        console.log("new code:", code);
+    }
+    result.push(code);
+}
+console.log("Bathroom code:", result);
