@@ -1,0 +1,50 @@
+{
+    "extends": ["standard", "plugin:react/recommended"],
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true,
+            "impliedStrict": true
+        }
+    },
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
+    "plugins": [
+        "react",
+        "jest"
+    ],
+    "rules": {
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
+        "linebreak-style": ["error", "unix"],
+        "quotes": "off",
+        "semi": ["error", "always"],
+
+        // toto by sa mohlo zmenit na always. Robilo to problemy len IE8, ale ten uz nepouzivame
+        "comma-dangle": ["error", "never"],
+        "no-cond-assign": ["error", "always"],
+
+        // disable rules from base configurations
+        "no-console": "off",
+        "space-before-function-paren": ["error", "never"],
+        "one-var": ["error", "always"],
+        "no-multiple-empty-lines": ["error", {
+            "max": 2
+        }],
+        "spaced-comment": "off",
+        "one-var-declaration-per-line": ["warn", "initializations"],
+        "padded-blocks": ["warn", "never"],
+        "no-return-assign": "warn",
+        "no-unused-vars": "warn",
+        "key-spacing": ["error", {
+            "afterColon": true,
+            "mode": "minimum"
+        }],
+        "strict": ["warn", "global"]
+    }
+}
