@@ -9,7 +9,8 @@
   "dependencies": {
     "@types/node": "^8.0.53",
     "babel-polyfill": "^6.26.0",
-    "ramda": "^0.25.0"
+    "ramda": "^0.25.0",
+    "sanctuary": "^0.15.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
