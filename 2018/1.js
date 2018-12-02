@@ -11,7 +11,6 @@ console.log('1a. frequency=', solution1(input))
 // 2a. same frequency repeated the first time
 // reducer
 const addUntilRepeated = cache => compose(
-  // TODO Either would be nicer
   ifElse(
     fq => cache.has(fq),
     fq => reduced({fq, done: true}),
