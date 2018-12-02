@@ -1,4 +1,4 @@
-import { reduce, reduced } from 'ramda'
+import { compose, ifElse, useWith, prop, identity, add, reduce, reduced } from 'ramda'
 const input = [4, 3, -15, -8, 15, -17, -16, 15, -10, 1, 17, 19, -10, 17, 11, 3, -13, -13, -20, 10, -7, 2, -12, 2, 2, 7, 7, 19, -18,
 -10, 16, 18, -9, 15, -16, 15, 15, 14, 13, 15, 2, 6, 10, 12, 13, 8, 3, -19, -12, 19, 13, 4, 16, 16, -10, 15, -16, 17, 16, 5, 1, 17, 15, -16,
 3, 17, -9, -4, -11, 2, 19, -12, 9, 8, 8, -7, 17, -15, -17, 18, 9, -11, 10, 5, -18, 15, 12, -3, -2, 18, -1, 5, 12, 3, -7, 16, 3, 4, 17, -13, 7, -13,
@@ -28,24 +28,24 @@ const input = [4, 3, -15, -8, 15, -17, -16, 15, -10, 1, 17, 19, -10, 17, 11, 3, 
 -30, -7, 10, 14, -3, 20, 11, -1, 9, -22, -19, -3, -8, 3, -18, 8, 3, -7, -2, -7, 6, 15, -19, 13, -26, 7, -18, -13, 21, -9, 10, -130255]
 
 const sum = (x, y) => x + y
-const result = input.reduce(sum, 0)
-console.log('1a. result is', result)
+const solution1 = reduce(sum, 0)
+console.log('1a. result is', solution1(input))
 
+// ==========================================
 // 2a. same frequency repeated the first time
-const frequencies = new Set()
-const changeFrequencyUntilRepeated = cache => ({ freq }, delta) => {
-  if (cache.has(freq)) {
-    return reduced({ freq, done: true })
-  }
-  cache.add(freq)
-  return { freq: freq + delta, done: false }
-}
-const repeatedFrequencyFinder = reduce(changeFrequencyUntilRepeated(frequencies))
+// reducer
+const addUntilRepeated = cache => compose(
+  // TODO Either would be nicer
+  ifElse(
+    fq => cache.has(fq),
+    fq => reduced({fq, done: true}),
+    fq => (cache.add(fq), { fq, done: false }),
+  ),
+  useWith(add, [prop('fq'), identity]), // add delta
+)
+const addUntilRepeatedWithCache = reduce(addUntilRepeated(new Set()))
 
-let result2 = { freq: 0, done: false }
-while (!result2.done) {
-  result2 = repeatedFrequencyFinder(result2, input)
-}
+const solution2 = (deltas, { fq, done }) =>
+  done ? fq : solution2(deltas, addUntilRepeatedWithCache({ fq }, deltas))
 
-console.log('1b. first repeated frequency=', result2.freq)
-
+console.log('1b. first repeated frequency=', solution2(input, { fq: 0, done: false }))
