@@ -4,13 +4,16 @@ import { compose, ifElse, useWith, prop, identity, add, reduce, reduced } from '
 const input = readFileSync('./1_input').toString().split('\n').slice(0, -1).map(Number)
 // ==========================================
 
-const solution1 = reduce(add, 0)
-console.log('1a. frequency=', solution1(input))
+// PART 1 ==========================================
+const solution1 = compose(
+  console.log,
+  reduce(add, 0),
+)
 
-// ==========================================
-// 2a. same frequency repeated the first time
-// reducer
-const addUntilRepeated = cache => compose(
+solution1(input)
+
+// PART 2 ==========================================
+const addUntilRepeatedReducer = cache => compose(
   ifElse(
     fq => cache.has(fq),
     fq => reduced({fq, done: true}),
@@ -18,9 +21,13 @@ const addUntilRepeated = cache => compose(
   ),
   useWith(add, [prop('fq'), identity]), // add delta
 )
-const addUntilRepeatedWithCache = reduce(addUntilRepeated(new Set()))
+const addUntilRepeatedWithCache = reduce(addUntilRepeatedReducer(new Set()))
 
-const solution2 = (deltas, { fq, done }) =>
-  done ? fq : solution2(deltas, addUntilRepeatedWithCache({ fq }, deltas))
+const applyDeltas = (deltas, { fq, done } = { fq: 0, done: false }) =>
+  done ? fq : applyDeltas(deltas, addUntilRepeatedWithCache({ fq }, deltas))
 
-console.log('1b. first repeated frequency=', solution2(input, { fq: 0, done: false }))
+const solution2 = compose(
+  console.log,
+  applyDeltas,
+)
+solution2(input)
