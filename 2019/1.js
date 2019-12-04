@@ -1,7 +1,7 @@
 import { compose, flip, divide, subtract, useWith, add, identity, reduce } from 'ramda'
 import { run, readInput } from '../common'
 
-const input = readInput('./1_input').map(Number)
+const input = readInput('./1_input').slice(0, -1).map(Number)
 
 
 // PART 1
