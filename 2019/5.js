@@ -1,102 +1,271 @@
+import {
+  head,
+  compose,
+  update,
+  add,
+  multiply,
+  split,
+  match,
+  reverse,
+  map,
+} from 'ramda'
+import { pipe } from 'sanctuary'
 import { readInput, run } from '../common'
-import { head, compose, update, add, multiply } from 'ramda'
 
-const program = readInput('./5_input', ',').map(Number)
+const input = readInput('./5_input', ',').map(Number)
 
 // PART 1
-const programCopy = program.slice()
-
 const ADD = 1
 const MULTIPLY = 2
 const INPUT = 3
 const OUTPUT = 4
+const JUMP_IF_TRUE = 5
+const JUMP_IF_FALSE = 6
+const LESS_THAN = 7
+const EQUALS = 8
 const HALT = 99
-
-const operations = new Map()
-operations.set(ADD, add)
-operations.set(MULTIPLY, multiply)
 
 // params modes
 const POSITION = 0
 const IMMEDIATE = 1
 
-const parseOpcode = opcode => {
-  // TODO return [op, modes]
+function operationMeta(meta) {
+  const parsed = match(/([0-9]*)([0-9]{2})|([1-9])/, String(meta))
+
+  if (parsed.length < 1) {
+    throw new Error(`Invalid op meta: ${meta}`)
+  }
+  let opcode
+  let modes
+  if (parsed[2] !== undefined) {
+    opcode = Number(parsed[2])
+    modes = pipe([split(''), reverse, map(Number)])(parsed[1])
+  } else {
+    opcode = Number(parsed[3])
+    modes = []
+  }
+  return [opcode, modes]
 }
 
 // read from data appropriate number of parameters according to operation arity
 // respects param modes - interprets position parameters as values
-const prepareComputation = (operation, data, pointer, modes) => {
-  const params = []
+// missing modes should default to 0 (POSITION)
+function prepareComputation(operation, data, pointer, modes, stdout, stdin) {
+  let params
+  let calculateResult
   let handleResult
-  let nextPosition
+  let nextPointer
+  let getNextPointer
+  let jumpPointerTo
+  let noJumpTo
+  let shouldJump
+  let dest
+
+  function validateTargetAddress(address) {
+    if (address === undefined) {
+      throw new Error(
+        `Target memory address is unknown for operation ${operation} at position ${pointer}`,
+      )
+    }
+    if (address > data.length - 1) {
+      throw new Error(`Address ${address} is out of bounds`)
+    }
+  }
+
   switch (operation) {
     case ADD:
     case MULTIPLY:
-      params.push(modes[0] === IMMEDIATE ? data[pointer + 1] : data[data[pointer + 1]])
-      params.push(modes[1] === IMMEDIATE ? data[pointer + 2] : data[data[pointer + 2]])
+      if (operation === ADD) {
+        calculateResult = (x, y) => x + y
+      } else if (operation === MULTIPLY) {
+        calculateResult = (x, y) => x * y
+      }
+
+      params = [
+        modes[0] === POSITION || modes[0] === undefined
+          ? data[data[pointer + 1]]
+          : data[pointer + 1],
+        modes[1] === POSITION || modes[1] === undefined
+          ? data[data[pointer + 2]]
+          : data[pointer + 2],
+      ]
       dest = data[pointer + 3]
+      validateTargetAddress(dest)
+
       handleResult = (val) => {
+        // eslint-disable-next-line no-param-reassign
         data[dest] = val
       }
-      nextPosition = pointer + 4
+
+      nextPointer = pointer + 4
       break
 
     case INPUT:
+      calculateResult = () => stdin.read()
+      params = []
+      dest = data[pointer + 1]
+      validateTargetAddress(dest)
+      handleResult = (val) => {
+        // eslint-disable-next-line no-param-reassign
+        data[dest] = val
+      }
+      nextPointer = pointer + 2
+      break
+
+    case OUTPUT:
+      calculateResult = (value) => value
+      params = [
+        modes[0] === POSITION || modes[0] === undefined
+          ? data[data[pointer + 1]]
+          : data[pointer + 1],
+      ]
+      // handleResult = (value) => console.log(`[OUTPUT] ${value}`)
+      handleResult = stdout.write
+      nextPointer = pointer + 2
+      break
+
+    case LESS_THAN:
+      calculateResult = (x, y) => (x < y ? 1 : 0)
+      params = [
+        modes[0] === POSITION || modes[0] === undefined
+          ? data[data[pointer + 1]]
+          : data[pointer + 1],
+        modes[1] === POSITION || modes[1] === undefined
+          ? data[data[pointer + 2]]
+          : data[pointer + 2],
+      ]
+      dest = data[pointer + 3]
+      validateTargetAddress(dest)
+
+      handleResult = (val) => {
+        // eslint-disable-next-line no-param-reassign
+        data[dest] = val
+      }
+
+      nextPointer = pointer + 4
+      break
+
+    case EQUALS:
+      calculateResult = (x, y) => (x === y ? 1 : 0)
+      params = [
+        modes[0] === POSITION || modes[0] === undefined
+          ? data[data[pointer + 1]]
+          : data[pointer + 1],
+        modes[1] === POSITION || modes[1] === undefined
+          ? data[data[pointer + 2]]
+          : data[pointer + 2],
+      ]
+      dest = data[pointer + 3]
+      validateTargetAddress(dest)
+
+      handleResult = (val) => {
+        // eslint-disable-next-line no-param-reassign
+        data[dest] = val
+      }
+
+      nextPointer = pointer + 4
+      break
+
+    case JUMP_IF_TRUE:
+      calculateResult = (x) => x !== 0
+      params = [
+        modes[0] === POSITION || modes[0] === undefined
+          ? data[data[pointer + 1]]
+          : data[pointer + 1],
+      ]
+      jumpPointerTo =
+        modes[1] === POSITION || modes[1] === undefined
+          ? data[data[pointer + 2]]
+          : data[pointer + 2]
+      noJumpTo = pointer + 3
+
+      handleResult = (shouldJump) => {
+        nextPointer = shouldJump ? jumpPointerTo : noJumpTo
+      }
+      break
+
+    case JUMP_IF_FALSE:
+      calculateResult = (x) => x === 0
+      params = [
+        modes[0] === POSITION || modes[0] === undefined
+          ? data[data[pointer + 1]]
+          : data[pointer + 1],
+      ]
+      jumpPointerTo =
+        modes[1] === POSITION || modes[1] === undefined
+          ? data[data[pointer + 2]]
+          : data[pointer + 2]
+      noJumpTo = pointer + 3
+
+      handleResult = (shouldJump) => {
+        nextPointer = shouldJump ? jumpPointerTo : noJumpTo
+      }
+      break
+
+    default:
+      throw new Error(`Unknown operation code: ${operation}`)
   }
 
-  const fn = operations[operation]
+  if (nextPointer > data.length - 1) {
+    throw new Error(`Next pointer ${nextPointer} is out of bounds`)
+  }
 
   return {
+    calculateResult,
     params,
-    fn,
     handleResult,
-    nextPosition,
+    getNextPointer: () => nextPointer,
   }
 }
 
-const compute = (data, pointer = 0, input = () => {}, output = () => {}) => {
-  const opcode = data[pointer]
-  const [op, ...modes] = parseOpcode(opcode)
+const compute = (data, pointer = 0, stdout, stdin) => {
+  const meta = data[pointer]
+  const [op, modes] = operationMeta(meta)
 
-  if (op !== ADD && op !== MULTIPLY && op !== INPUT && op !== OUTPUT && op !== HALT) {
+  if (
+    op !== ADD &&
+    op !== MULTIPLY &&
+    op !== INPUT &&
+    op !== OUTPUT &&
+    op !== HALT &&
+    op !== JUMP_IF_TRUE &&
+    op !== JUMP_IF_FALSE &&
+    op !== LESS_THAN &&
+    op !== EQUALS
+  ) {
     throw new Error(`Invalid operation ${op} encountered at address ${pointer}`)
   }
   if (op === HALT) {
-    return data
+    return stdout.value
   }
 
-  // TODO params interpreted as values (if mode = 0)
-  const { params, fn, handleResult } = prepareComputation(op, data, pointer, modes)
+  const {
+    calculateResult,
+    params,
+    handleResult,
+    getNextPointer,
+  } = prepareComputation(op, data, pointer, modes, stdout, stdin)
 
-  handleResult(fn(...params))
-
-
-  if (param1 === undefined) {
-    throw new Error(`First operand not found in the data at address ${data[pointer + 1]}`)
-  }
-  if (param2 === undefined) {
-    throw new Error(`Second operand not found in the data at address ${data[pointer + 2]}`)
-  }
-  if (address === undefined) {
-    throw new Error(`Target memory address not found at ${pointer + 3}`)
-  }
-  if (address >= data.length) {
-    throw new Error(`Address ${address} is out of bounds`)
-  }
-  if (op === ADD) {
-    data[address] = param1 + param2
-  }
-  if (op === MULTIPLY) {
-    data[address] = param1 * param2
-  }
-  if ((pointer + 4 > data.length + 1)) {
-    return data
-  }
-  return compute(data, pointer + 4)
+  handleResult(calculateResult(...params))
+  return compute(data, getNextPointer(), stdout)
 }
 
-const inputProvider = 
-const output = 
+const STDOUT = {
+  value: '',
+  write: (x) => {
+    console.log(`[OUTPUT] ${x}`)
+    STDOUT.value = x
+  },
+}
 
-compute(programCopy, 0, () => 1, x => console.log('[OUTPUT]', x))
+function createStdIn(value) {
+  return {
+    read: () => value,
+  }
+}
+
+const solution1 = (program) => compute(program, 0, STDOUT, createStdIn(1))
+run('PART1', solution1, input)
+
+const solution2 = (program) => compute(program, 0, STDOUT, createStdIn(5))
+run('PART2', solution2, input)
