@@ -215,37 +215,57 @@ function prepareComputation(operation, data, pointer, modes, stdout, stdin) {
   }
 }
 
-export const compute = curry((data, pointer, stdout, stdin) => {
-  const instruction = data[pointer]
-  const [op, modes] = parseInstruction(instruction)
+export const computor = (data) => {
+  let pointer = 0
 
-  if (
-    op !== ADD &&
-    op !== MULTIPLY &&
-    op !== INPUT &&
-    op !== OUTPUT &&
-    op !== HALT &&
-    op !== JUMP_IF_TRUE &&
-    op !== JUMP_IF_FALSE &&
-    op !== LESS_THAN &&
-    op !== EQUALS
-  ) {
-    throw new Error(`Invalid operation ${op} encountered at address ${pointer}`)
-  }
-  if (op === HALT) {
-    return stdout.value
-  }
+  const run = curry((stdout, stdin) => {
+    if (run.halted) {
+      console.log('COMPUTATION IS HALTED, CANNOT CONTINUE')
+      return undefined
+    }
+    const instruction = data[pointer]
+    const [op, modes] = parseInstruction(instruction)
 
-  const {
-    calculateResult,
-    params,
-    handleResult,
-    getNextPointer,
-  } = prepareComputation(op, data, pointer, modes, stdout, stdin)
+    if (
+      op !== ADD &&
+      op !== MULTIPLY &&
+      op !== INPUT &&
+      op !== OUTPUT &&
+      op !== HALT &&
+      op !== JUMP_IF_TRUE &&
+      op !== JUMP_IF_FALSE &&
+      op !== LESS_THAN &&
+      op !== EQUALS
+    ) {
+      throw new Error(
+        `Invalid operation ${op} encountered at address ${pointer}`,
+      )
+    }
+    if (op === HALT) {
+      run.halted = true
+      return stdout.value
+    }
 
-  handleResult(calculateResult(...params))
-  return compute(data, getNextPointer(), stdout, stdin)
-})
+    if (op === INPUT) {
+      if (stdin.readNotConsume() === undefined) {
+        return stdout.value
+      }
+    }
+
+    const {
+      calculateResult,
+      params,
+      handleResult,
+      getNextPointer,
+    } = prepareComputation(op, data, pointer, modes, stdout, stdin)
+
+    handleResult(calculateResult(...params))
+    pointer = getNextPointer()
+    return run(stdout, stdin)
+  })
+  run.halted = false
+  return run
+}
 
 export const STDOUT = {
   value: '',
@@ -259,5 +279,6 @@ export function createStdIn(...values) {
   let index = 0
   return {
     read: () => values[index++],
+    readNotConsume: () => values[index],
   }
 }
