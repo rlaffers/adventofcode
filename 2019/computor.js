@@ -8,6 +8,7 @@ import {
   match,
   reverse,
   map,
+  curry,
 } from 'ramda'
 import { pipe } from 'sanctuary'
 
@@ -214,7 +215,7 @@ function prepareComputation(operation, data, pointer, modes, stdout, stdin) {
   }
 }
 
-export const compute = (data, pointer = 0, stdout, stdin) => {
+export const compute = curry((data, pointer, stdout, stdin) => {
   const instruction = data[pointer]
   const [op, modes] = parseInstruction(instruction)
 
@@ -243,8 +244,8 @@ export const compute = (data, pointer = 0, stdout, stdin) => {
   } = prepareComputation(op, data, pointer, modes, stdout, stdin)
 
   handleResult(calculateResult(...params))
-  return compute(data, getNextPointer(), stdout)
-}
+  return compute(data, getNextPointer(), stdout, stdin)
+})
 
 export const STDOUT = {
   value: '',
@@ -254,8 +255,9 @@ export const STDOUT = {
   },
 }
 
-export function createStdIn(value) {
+export function createStdIn(...values) {
+  let index = 0
   return {
-    read: () => value,
+    read: () => values[index++],
   }
 }
