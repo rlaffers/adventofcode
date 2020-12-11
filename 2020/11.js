@@ -1,6 +1,6 @@
 import S from 'sanctuary'
 import R from 'ramda'
-import { run, readLines } from '../common'
+import { run, readLines, loopUntil } from '../common'
 
 const example = `L.LL.LL.LL
 LLLLLLL.LL
@@ -17,14 +17,6 @@ const input = readLines('./11_input')
 
 const DONE = 'done'
 const PENDING = 'pending'
-
-const loopUntil = (f) => (g) => (x) => {
-  let y = g(x)
-  while (!f(y)) {
-    y = g(y)
-  }
-  return y
-}
 
 const notNil = (x) => x != null
 
