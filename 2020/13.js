@@ -33,7 +33,8 @@ const solution1 = S.pipe([
   )(S.pipe([findItemWithLowestMultipleGteHead, R.head])),
 ])
 
-run('PART1', solution1, input)
+// TODO
+// run('PART1', solution1, input)
 
 const reducer = ([result, offset]) => (current) => {
   if (current === 'x') {
@@ -57,12 +58,35 @@ function isItGood(number, primesWithOffset) {
 }
 
 function dumbGetResult(offsets) {
-  const [, rootPrime] = offsets[0]
   const rest = R.tail(offsets)
-  let time = 100000000000000
+
+  // works, but slow
+  // const [, increment] = offsets[0]
+  //
+  // OPTIMIZATION 1
+  // it is possible to use this large increment due to
+  // a bus 997 being at position +13 minutes after bus 13 (+0 min)
+  const increment = 13 * 997
+
+  // this simplification was given upfront
+  let minTime = 100000000000000
+  let time = 0
+  while (time - 13 < minTime) {
+    time += increment
+  }
+
+  // OPTIMIZATION 2
+  // a quicker check of given time is possible because of
+  // bus 23 at position +21
+  // bus 619 at position +44 (=== +21+23)
+  // so t+44 must be divisble by both 23 and 619
+  // t is t0 + 13
+  let x = 23 * 619
+  const quickCheck = (t) => (t + 31) % x === 0
+
   let i = 1e8
-  while (!isItGood(time, rest)) {
-    time += rootPrime
+  while (!quickCheck(time) || !isItGood(time - 13, rest)) {
+    time += increment
     if (i <= 0) {
       console.log('checking time', time) // TODO remove console.log
       i = 1e8
@@ -70,7 +94,7 @@ function dumbGetResult(offsets) {
       i -= 1
     }
   }
-  return time
+  return time - 13
 }
 
 const solution2 = S.pipe([
