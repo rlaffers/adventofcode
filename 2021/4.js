@@ -124,8 +124,7 @@ const solution1 = S.pipe([
   calculateScore,
 ])
 
-// TODO
-// run('PART1', solution1, input)
+run('PART1', solution1, input)
 
 // --------------
 const findAllCompletedBoards = (boards) => {
