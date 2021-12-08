@@ -5,12 +5,6 @@ import { run, readInput } from '../common'
 // const input = `3,4,3,1,2`.split(',')
 const input = readInput('./6_input', ',')
 
-function spawn(remainingDays) {
-  if (remainingDays <= 0) {
-    return 1
-  }
-}
-
 const calculateOffspring = (totalDays) => (timerStart) => {
   let fishCount = 1
   for (
