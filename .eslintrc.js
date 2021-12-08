@@ -14,6 +14,7 @@ module.exports = {
     },
   },
   rules: {
+    'no-param-reassign': 'off',
     'no-restricted-syntax': 'off',
     'no-unused-vars': 'off',
     'no-console': 'off',

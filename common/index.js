@@ -15,3 +15,19 @@ module.exports.loopUntil = (f) => (g) => (x) => {
   }
   return y
 }
+
+module.exports.timer = {
+  timers: {},
+  start(label) {
+    return () => {
+      console.log(`→ ${label}`)
+      this.timers[label] = Date.now()
+    }
+  },
+  stop(label) {
+    return () => {
+      const elapsed = Math.round(Date.now() - this.timers[label])
+      console.log(`Elapsed since ${label}: ${elapsed} ms`)
+    }
+  },
+}
