@@ -36,12 +36,12 @@ try {
 try {
   await copyFile(
     join(__dirname, 'template.js'),
-    join(__dirname, year, `${day}.js`),
+    join(__dirname, year, `${day}.mjs`),
     constants.COPYFILE_EXCL,
   )
-  console.log(`File ${year}/${day}.js was created.`)
+  console.log(`File ${year}/${day}.mjs was created.`)
 } catch (err) {
-  console.error(`Failed to create file ${day}.js`, err)
+  console.error(`Failed to create file ${day}.mjs`, err)
   process.exit(1)
 }
 

@@ -6,6 +6,10 @@
   "repository": "git@github.com:rlaffers/adventofcode.git",
   "author": "Richard Laffers <rlaffers@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "c": "babel-node create.mjs",
+    "s": "babel-node solve.mjs"
+  },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.16.3",
