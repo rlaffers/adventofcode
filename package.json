@@ -1,5 +1,6 @@
 {
   "name": "adventofcode",
+  "type": "module",
   "version": "1.0.0",
   "description": "Solutions to adventofcode.com",
   "main": "index.js",
@@ -7,8 +8,8 @@
   "author": "Richard Laffers <rlaffers@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "c": "babel-node create.mjs",
-    "s": "babel-node solve.mjs"
+    "create": "node create.mjs",
+    "solve": "node solve.mjs"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
