@@ -8,8 +8,8 @@
   "author": "Richard Laffers <rlaffers@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "create": "node create.js",
-    "solve": "node solve.js"
+    "create": "node --experimental-specifier-resolution=node create.js",
+    "solve": "node --experimental-specifier-resolution=node solve.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
