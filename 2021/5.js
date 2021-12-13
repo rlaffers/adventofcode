@@ -1,6 +1,6 @@
 import R from 'ramda'
 import S from 'sanctuary'
-import { run, readInput, timer } from '../common'
+import { run, readInput } from '../common'
 
 // const input = `0,9 -> 5,9
 // 8,0 -> 0,8
@@ -82,7 +82,6 @@ const markCrossedPoints = (points, line) => {
 }
 
 const createEmptySpace = S.pipe([
-  R.tap(timer.start('create space')),
   S.chain(R.splitEvery(2)),
   S.lift2(R.pair)(S.pipe([S.map(R.prop(0)), S.reduce(S.max)(-Infinity)]))(
     S.pipe([S.map(R.prop(1)), S.reduce(S.max)(-Infinity)]),
@@ -91,7 +90,6 @@ const createEmptySpace = S.pipe([
     Array(yMax + 1)
       .fill('')
       .map(() => Array(xMax + 1).fill(0)),
-  R.tap(timer.stop('create space')),
 ])
 
 const countIntersections = (space) => {
@@ -107,38 +105,23 @@ const countIntersections = (space) => {
 }
 
 const solution1 = S.pipe([
-  R.tap(timer.start('START')),
   S.map(R.match(/(\d+),(\d+)\s+->\s+(\d+),(\d+)/)),
   S.map(R.props([1, 2, 3, 4])),
   S.map(S.map(Number)),
   S.filter(isHorizontalOrVertical),
-  R.tap(timer.start('marking points')),
   S.lift2(R.reduce(markCrossedPoints))(createEmptySpace)(R.identity),
-  R.tap(timer.stop('marking points')),
-  R.tap(timer.start('count intersections')),
   countIntersections,
-  // this is sloooow
-  // S.chain(S.filter(R.lt(1))),
-  // R.length,
-  R.tap(timer.stop('count intersections')),
-  R.tap(timer.stop('START')),
 ])
 
-// run('PART1', solution1, input)
+run('PART1', solution1, input)
 
 // -----------
 const solution2 = S.pipe([
-  R.tap(timer.start('START')),
   S.map(R.match(/(\d+),(\d+)\s+->\s+(\d+),(\d+)/)),
   S.map(R.props([1, 2, 3, 4])),
   S.map(S.map(Number)),
-  R.tap(timer.start('marking points')),
   S.lift2(R.reduce(markCrossedPoints))(createEmptySpace)(R.identity),
-  R.tap(timer.stop('marking points')),
-  R.tap(timer.start('count intersections')),
   countIntersections,
-  R.tap(timer.stop('count intersections')),
-  R.tap(timer.stop('START')),
 ])
 
 run('PART2', solution2, input)
