@@ -33,28 +33,15 @@ function literalNumber2dec(bits) {
   return bin2dec(b)
 }
 
-function op(operator, values) {
-  switch (operator) {
-    case 0:
-      return R.sum(values)
-    case 1:
-      return values.reduce(R.multiply, 1)
-    case 2:
-      return values.reduce(R.min, Infinity)
-    case 3:
-      return values.reduce(R.max, -Infinity)
-    case 4:
-      return values[0]
-    case 5:
-      return values[0] > values[1] ? 1 : 0
-    case 6:
-      return values[0] < values[1] ? 1 : 0
-    case 7:
-      return values[0] === values[1] ? 1 : 0
-
-    default:
-      throw new Error('unknown operator', operator)
-  }
+const ops = {
+  0: R.sum,
+  1: R.reduce(R.multiply, 1),
+  2: R.reduce(R.min, Infinity),
+  3: R.reduce(R.max, -Infinity),
+  4: R.head,
+  5: ([x, y]) => (x > y ? 1 : 0),
+  6: ([x, y]) => (x < y ? 1 : 0),
+  7: R.apply(R.equals),
 }
 
 function unpackWhile(predicate, bits, versionSum) {
@@ -77,15 +64,13 @@ function unpack(packet) {
 
   const operator = bin2dec(packet.substring(3, 6))
   if (operator === 4) {
-    // literal
     const literalNumberBits = readLiteralNumberBits(packet.substring(6))
     return {
       remainder: packet.substring(6 + literalNumberBits.length),
-      value: op(operator, [literalNumber2dec(literalNumberBits)]),
+      value: ops[operator]([literalNumber2dec(literalNumberBits)]),
       versionSum,
     }
   }
-  // operator, there will be subpackets
   const lengthType = packet[6]
   if (lengthType === '0') {
     const packetsLength = bin2dec(packet.substring(7, 22))
@@ -98,7 +83,7 @@ function unpack(packet) {
     } = unpackWhile(({ bits }) => notEmpty(bits), remainder, versionSum)
     return {
       remainder: packet.substring(22 + packetsLength),
-      value: op(operator, packetValues),
+      value: ops[operator](packetValues),
       versionSum: nextVersionSum,
     }
   } else {
@@ -116,7 +101,7 @@ function unpack(packet) {
     )
     return {
       remainder: bitsLeft,
-      value: op(operator, packetValues),
+      value: ops[operator](packetValues),
       versionSum: nextVersionSum,
     }
   }
