@@ -99,6 +99,7 @@ function tile(lines) {
   return fullSpace
 }
 
-const solver2 = S.pipe([tile, createAdjacencyMatrix, dijkstra])
+// const solver2 = S.pipe([tile, createAdjacencyMatrix, dijkstra])
+const solver2 = (x) => x
 
 export const solvers = [solver1, solver2]
