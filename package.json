@@ -9,7 +9,7 @@
   "author": "Richard Laffers <rlaffers@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "create": "node create.js",
+    "gen": "node create.js",
     "solve": "node solve.js"
   },
   "dependencies": {

@@ -1,14 +1,17 @@
-const { curry, invoker } = require('ramda')
-const { pipe, lines } = require('sanctuary')
-const { readFileSync } = require('fs')
-module.exports.run = curry((label, solver, input) =>
+import { curry, invoker } from 'ramda'
+import S from 'sanctuary'
+import { readFileSync } from 'fs'
+
+export const run = curry((label, solver, input) =>
   console.log(label, solver(input)),
 )
-module.exports.readInput = (path, separator = '\n') =>
-  readFileSync(path).toString().split(separator)
-module.exports.readLines = pipe([readFileSync, invoker(0, 'toString'), lines])
 
-module.exports.loopUntil = (f) => (g) => (x) => {
+export const readInput = (path, separator = '\n') =>
+  readFileSync(path).toString().split(separator)
+
+export const readLines = S.pipe([readFileSync, invoker(0, 'toString'), S.lines])
+
+export const loopUntil = (f) => (g) => (x) => {
   let y = g(x)
   while (!f(y)) {
     y = g(y)
@@ -16,7 +19,7 @@ module.exports.loopUntil = (f) => (g) => (x) => {
   return y
 }
 
-module.exports.timer = {
+export const timer = {
   timers: {},
   start(label) {
     return () => {
