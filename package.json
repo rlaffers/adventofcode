@@ -1,6 +1,7 @@
 {
   "name": "adventofcode",
   "type": "module",
+  "private": true,
   "version": "1.0.0",
   "description": "Solutions to adventofcode.com",
   "main": "index.js",
@@ -8,38 +9,28 @@
   "author": "Richard Laffers <rlaffers@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "create": "node --experimental-specifier-resolution=node create.js",
-    "solve": "node --experimental-specifier-resolution=node solve.js"
+    "create": "node create.js",
+    "solve": "node solve.js"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
-    "@babel/runtime": "^7.16.3",
-    "@types/node": "^16.11.12",
+    "@types/node": "^18.11.10",
     "crocks": "^0.12.4",
     "lodash": "^4.17.21",
     "memoize-one": "^6.0.0",
-    "ramda": "^0.27.1",
+    "ramda": "^0.28.0",
     "sanctuary": "^3.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.0",
-    "@babel/node": "^7.16.0",
-    "@babel/plugin-proposal-class-properties": "^7.16.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
-    "@babel/plugin-transform-runtime": "^7.16.4",
-    "@babel/preset-env": "^7.16.4",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^8.4.1",
-    "eslint-config-airbnb": "^19.0.2",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-compat": "^4.0.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-promise": "^5.2.0",
-    "eslint-plugin-react": "^7.27.1",
-    "prettier": "^2.5.1",
-    "react": "^17.0.2"
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-compat": "^4.0.2",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^2.8.0"
+  },
+  "volta": {
+    "node": "18.12.1"
   }
 }
