@@ -9,8 +9,9 @@
   "author": "Richard Laffers <rlaffers@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "gen": "node create.js",
-    "solve": "node solve.js"
+    "gen": "bun create.js",
+    "solve": "bun solve.js",
+    "postinstall": "curl https://bun.sh/install | bash"
   },
   "dependencies": {
     "@types/node": "^18.11.10",
