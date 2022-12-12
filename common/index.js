@@ -34,3 +34,16 @@ export const timer = {
     }
   },
 }
+
+// some FP combinators
+// Produces a unary function:
+// substitute (like S.ap) aka starling
+export const substitute = (f) => (g) => (x) => f(x)(g(x))
+// lift2 (like R.converge), aka phoenix
+export const lift2 = (f) => (g) => (h) => (x) => f(g(x))(h(x))
+
+// Produces a binary function:
+// black bird
+export const black = (f) => (g) => (x) => (y) => f(g(x)(y))
+// psi (like S.on)
+export const psi = (f) => (g) => (x) => (y) => f(g(x))(g(y))
