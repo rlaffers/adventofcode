@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/node": "^18.11.10",
     "big.js": "^6.2.1",
+    "colors": "^1.4.0",
     "crocks": "^0.12.4",
     "lodash": "^4.17.21",
     "memoize-one": "^6.0.0",

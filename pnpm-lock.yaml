@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/node': ^18.11.10
   big.js: ^6.2.1
+  colors: ^1.4.0
   crocks: ^0.12.4
   eslint: ^8.28.0
   eslint-config-airbnb: ^19.0.4
@@ -21,6 +22,7 @@ specifiers:
 dependencies:
   '@types/node': 18.11.10
   big.js: 6.2.1
+  colors: 1.4.0
   crocks: 0.12.4
   lodash: 4.17.21
   memoize-one: 6.0.0
@@ -296,6 +298,11 @@ packages:
   /color-name/1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
+
+  /colors/1.4.0:
+    resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==}
+    engines: {node: '>=0.1.90'}
+    dev: false
 
   /concat-map/0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
