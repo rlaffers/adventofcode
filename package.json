@@ -19,6 +19,7 @@
     "colors": "^1.4.0",
     "crocks": "^0.12.4",
     "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "memoize-one": "^6.0.0",
     "node-dijkstra": "^2.5.0",
     "ramda": "^0.28.0",
