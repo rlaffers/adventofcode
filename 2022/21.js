@@ -82,8 +82,8 @@ function guessNumber(monkeys) {
   // let x = Number.MIN_SAFE_INTEGER
   let x = 0
   while (true) {
-    if (x > Number.MAX_SAFE_INTEGER) throw new Error('x too high')
-    // if (x % 30 === 0) console.log(x) // TODO remove console.log
+    // if (x > Number.MAX_SAFE_INTEGER) throw new Error('x too high')
+    if (x % 30 === 0) console.log(x) // TODO remove console.log
     // create a fresh copy of every monkey
     monkeys.splice(idxHuman, 1, ['humn', x])
     if (iterateMonkeys(R.clone(monkeys))) return x
