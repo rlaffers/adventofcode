@@ -9,8 +9,8 @@
   "author": "Richard Laffers <rlaffers@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "gen": "node create.js",
-    "solve": "node solve.js",
+    "gen": "bun run create.js",
+    "solve": "bun run solve.js",
     "postinstall": "curl https://bun.sh/install | bash"
   },
   "dependencies": {
@@ -23,7 +23,8 @@
     "memoize-one": "^6.0.0",
     "node-dijkstra": "^2.5.0",
     "ramda": "^0.28.0",
-    "sanctuary": "^3.1.0"
+    "sanctuary": "^3.1.0",
+    "yoctocolors": "^2.1.2"
   },
   "devDependencies": {
     "eslint": "^8.28.0",
