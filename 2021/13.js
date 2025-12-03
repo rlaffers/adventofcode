@@ -7,10 +7,7 @@ export const parser = S.pipe([
     (instructions, line) => {
       const matchedPoint = R.match(/^(\d+),(\d+)$/, line)
       if (!R.isEmpty(matchedPoint)) {
-        instructions.points.push([
-          Number(matchedPoint[1]),
-          Number(matchedPoint[2]),
-        ])
+        instructions.points.push([Number(matchedPoint[1]), Number(matchedPoint[2])])
         return instructions
       }
       const matchedFold = R.match(/(x|y)=(\d+)/, line)

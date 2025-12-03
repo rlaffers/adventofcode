@@ -48,13 +48,7 @@ const findInvalidIDs = (repeated) => (interval) => {
   const result = []
   const [min, max] = interval
   for (let n = min; n <= max; n += 1) {
-    if (
-      isInvalid(
-        n,
-        repeated ? Math.ceil(String(n).length / repeated) : undefined,
-      )
-    )
-      result.push(n)
+    if (isInvalid(n, repeated ? Math.ceil(String(n).length / repeated) : undefined)) result.push(n)
   }
   return result
 }

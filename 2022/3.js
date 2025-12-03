@@ -2,12 +2,7 @@ import * as R from 'ramda'
 import S from 'sanctuary'
 
 // PART 1
-const solver1 = S.pipe([
-  R.map(halves),
-  R.map(findError),
-  R.map(toScore),
-  R.reduce(R.add, 0),
-])
+const solver1 = S.pipe([R.map(halves), R.map(findError), R.map(toScore), R.reduce(R.add, 0)])
 
 function halves(line) {
   const middle = line.length / 2

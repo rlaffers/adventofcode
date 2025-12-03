@@ -1,15 +1,5 @@
 import { pipe, map, tagBy, either, add } from 'sanctuary'
-import {
-  slice,
-  replace,
-  reduce,
-  max,
-  sort,
-  subtract,
-  reduced,
-  head,
-  is,
-} from 'ramda'
+import { slice, replace, reduce, max, sort, subtract, reduced, head, is } from 'ramda'
 import { run, readInput } from '../common'
 
 // const input = `BFFFBBFRRR
@@ -17,10 +7,7 @@ import { run, readInput } from '../common'
 // BBFFBBFRLL`.split('\n')
 const input = readInput('./5_input', '\n').slice(0, -1)
 
-const splitIntoRowAndColumn = (str) => [
-  slice(0, 7, str),
-  slice(7, str.length, str),
-]
+const splitIntoRowAndColumn = (str) => [slice(0, 7, str), slice(7, str.length, str)]
 
 const replaceWithBinaryDigits = (zeroToken, oneToken) =>
   pipe([

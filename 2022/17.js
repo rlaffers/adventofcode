@@ -83,8 +83,7 @@ const shiftLeft = (x) => x << 1
 // TODO can we trim space (and keep count of the columns only)
 // TODO try running with node - it fails even sooner, better error
 const touchesRightWall = (rock) => rock.some((x) => !Boolean((x ^ 1) & 1))
-const touchesLeftWall = (rock) =>
-  rock.some((x) => !Boolean((x ^ 0b1000000) & 0b1000000))
+const touchesLeftWall = (rock) => rock.some((x) => !Boolean((x ^ 0b1000000) & 0b1000000))
 
 function canShiftRight(rock, z, space) {
   // z is the lowest rock row space index. If rock rests on the flor, z=0
@@ -126,18 +125,13 @@ function canDrop(rock, z, space) {
   if (z <= 0) return false
   const spaceRowBelow = space[z - 1]
   if (!spaceRowBelow) return true
-  if (
-    countSetBits(rock[0] | spaceRowBelow) !==
-    countSetBits(rock[0] ^ spaceRowBelow)
-  )
-    return false
+  if (countSetBits(rock[0] | spaceRowBelow) !== countSetBits(rock[0] ^ spaceRowBelow)) return false
   // if this is cross, we need to check the second row as well
   if (isCross(rock)) {
     const spaceRowBelowSecond = space[z]
     if (!spaceRowBelowSecond) return true
     return (
-      countSetBits(rock[1] | spaceRowBelowSecond) ===
-      countSetBits(rock[1] ^ spaceRowBelowSecond)
+      countSetBits(rock[1] | spaceRowBelowSecond) === countSetBits(rock[1] ^ spaceRowBelowSecond)
     )
   }
   return true
@@ -213,15 +207,7 @@ const start = (maxRocks) => (jets) => {
 
 function printSpace(space) {
   const image = space.reduce((acc, row) => {
-    return (
-      row
-        .toString(2)
-        .padStart(7, '0')
-        .replaceAll('0', '.')
-        .replaceAll('1', '#') +
-      '\n' +
-      acc
-    )
+    return row.toString(2).padStart(7, '0').replaceAll('0', '.').replaceAll('1', '#') + '\n' + acc
   }, '')
   console.log(image)
 }

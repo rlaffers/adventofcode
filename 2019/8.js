@@ -9,16 +9,18 @@ const countChar = (char) => S.pipe([R.match(new RegExp(char, 'g')), R.length])
 
 const countZeroes = countChar('0')
 
-const stringWithLeastZeroes = ([minCount, string]) => (x) => {
-  const count = countZeroes(x)
-  if (!count) {
-    return [0, x]
+const stringWithLeastZeroes =
+  ([minCount, string]) =>
+  (x) => {
+    const count = countZeroes(x)
+    if (!count) {
+      return [0, x]
+    }
+    if (count < minCount) {
+      return [count, x]
+    }
+    return [minCount, string]
   }
-  if (count < minCount) {
-    return [count, x]
-  }
-  return [minCount, string]
-}
 
 const solution1 = (width, height) =>
   S.pipe([

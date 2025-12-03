@@ -31,9 +31,7 @@ const createInactiveLayerForSpace = S.pipe([
   S.lift2(createMatrixOfDots)(getRowSize)(S.size),
 ])
 
-const prependInactiveLayer = S.ap(S.flip(S.prepend))(
-  createInactiveLayerForSpace,
-)
+const prependInactiveLayer = S.ap(S.flip(S.prepend))(createInactiveLayerForSpace)
 
 const appendInactiveLayer = S.ap(S.flip(S.append))(createInactiveLayerForSpace)
 
@@ -178,15 +176,16 @@ const job = ({ space, cycle = 1 }) => {
   return { space: nextSpace, cycle: cycle + 1 }
 }
 
-const cycleIs = (limit) => ({ cycle }) => cycle >= limit
+const cycleIs =
+  (limit) =>
+  ({ cycle }) =>
+    cycle >= limit
 
 const rowCounter = (rowCount, x) => {
   return x === '#' ? rowCount + 1 : rowCount
 }
 
-const countActiveCubesInLayer = S.reduce((c) => (row) =>
-  c + row.reduce(rowCounter, 0),
-)(0)
+const countActiveCubesInLayer = S.reduce((c) => (row) => c + row.reduce(rowCounter, 0))(0)
 
 const solution1 = S.pipe([
   S.map(S.splitOn('')),

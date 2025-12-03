@@ -138,10 +138,7 @@ function execute(instruction, line, program) {
         }
         //console.log("jumping " + jumpBy);
         return line + jumpBy
-      } else if (
-        !isIntegerish(instruction.arg1) &&
-        registers[instruction.arg1] !== 0
-      ) {
+      } else if (!isIntegerish(instruction.arg1) && registers[instruction.arg1] !== 0) {
         // jump
         if (isIntegerish(instruction.arg2)) {
           jumpBy = Number(instruction.arg2)
@@ -161,12 +158,7 @@ function execute(instruction, line, program) {
         return ++line
       }
       var toggledInstruction = program[toggledPosition]
-      console.log(
-        'toggling instruction ',
-        toggledPosition,
-        ':',
-        toggledInstruction,
-      )
+      console.log('toggling instruction ', toggledPosition, ':', toggledInstruction)
       switch (toggledInstruction.op) {
         case 'inc':
           toggledInstruction.op = 'dec'

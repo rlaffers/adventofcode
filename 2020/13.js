@@ -8,41 +8,35 @@ const input = readLines('./13_input')
 
 const notX = (x) => x !== 'x'
 const headToNumber = S.pipe([R.head, Number])
-const lastToNumbers = S.pipe([
-  R.last,
-  S.splitOn(','),
-  S.filter(notX),
-  S.map(Number),
-])
+const lastToNumbers = S.pipe([R.last, S.splitOn(','), S.filter(notX), S.map(Number)])
 const firstMultipleGteThan = (m) => (x) => x * Math.ceil(m / x)
 
-const calculateMultiplesWithRoots = (m) =>
-  S.map((x) => [x, firstMultipleGteThan(m)(x)])
+const calculateMultiplesWithRoots = (m) => S.map((x) => [x, firstMultipleGteThan(m)(x)])
 
 const findItemWithLowestMultipleGteHead = S.pipe([
   S.lift2(calculateMultiplesWithRoots)(R.head)(R.last),
-  S.reduce((a) => (b) => (a[1] < b[1] ? a : b))([NaN, Infinity]),
+  S.reduce((a) => (b) => a[1] < b[1] ? a : b)([NaN, Infinity]),
 ])
 
 const solution1 = S.pipe([
   S.lift2((x) => (y) => [x, y])(headToNumber)(lastToNumbers),
   S.lift2(S.mult)(
-    S.lift2((a) => (b) => b - a)(R.head)(
-      S.pipe([findItemWithLowestMultipleGteHead, R.last]),
-    ),
+    S.lift2((a) => (b) => b - a)(R.head)(S.pipe([findItemWithLowestMultipleGteHead, R.last])),
   )(S.pipe([findItemWithLowestMultipleGteHead, R.head])),
 ])
 
 // TODO
 // run('PART1', solution1, input)
 
-const reducer = ([result, offset]) => (current) => {
-  if (current === 'x') {
+const reducer =
+  ([result, offset]) =>
+  (current) => {
+    if (current === 'x') {
+      return [result, offset + 1]
+    }
+    result.push([Number(current), offset])
     return [result, offset + 1]
   }
-  result.push([Number(current), offset])
-  return [result, offset + 1]
-}
 
 const lineToBusesWithOffsets = S.pipe([
   S.splitOn(','),

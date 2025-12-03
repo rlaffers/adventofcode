@@ -15,14 +15,7 @@ const matchedToInput = ([, val, bot]) => ({
   val: Number(val),
   bot: Number(bot),
 })
-const matchedToBotInstruction = ([
-  ,
-  bot,
-  lowToType,
-  lowToID,
-  highToType,
-  highToID,
-]) => ({
+const matchedToBotInstruction = ([, bot, lowToType, lowToID, highToType, highToID]) => ({
   bot: Number(bot),
   low: [lowToType, Number(lowToID)],
   high: [highToType, Number(highToID)],
@@ -34,16 +27,11 @@ const parseInputs = S.pipe([
 ])
 
 const parseBotInstructions = S.pipe([
-  (str) => [
-    ...str.matchAll(
-      /bot (\d+) gives low to (\w+) (\d+) and high to (\w+) (\d+)/g,
-    ),
-  ],
+  (str) => [...str.matchAll(/bot (\d+) gives low to (\w+) (\d+) and high to (\w+) (\d+)/g)],
   S.map(matchedToBotInstruction),
 ])
 
-const botHas = (item1, item2) => (bot) =>
-  bot.storage.includes(item1) && bot.storage.includes(item2)
+const botHas = (item1, item2) => (bot) => bot.storage.includes(item1) && bot.storage.includes(item2)
 
 const DONE = 'done'
 const IN_PROGRESS = 'in_progress'
@@ -82,10 +70,8 @@ function executeBots({ bots, botInstructions, botIsDone, outputs }) {
     }
     // let low = Math.min(...bot.storage)
     // let high = Math.max(...bot.storage)
-    let lowValue =
-      bot.storage[0] < bot.storage[1] ? bot.storage[0] : bot.storage[1]
-    let highValue =
-      bot.storage[0] > bot.storage[1] ? bot.storage[0] : bot.storage[1]
+    let lowValue = bot.storage[0] < bot.storage[1] ? bot.storage[0] : bot.storage[1]
+    let highValue = bot.storage[0] > bot.storage[1] ? bot.storage[0] : bot.storage[1]
     let targetTypeLow = instruction.low[0]
     let targetIDLow = instruction.low[1]
     let targetTypeHigh = instruction.high[0]
@@ -141,42 +127,39 @@ function executeBots({ bots, botInstructions, botIsDone, outputs }) {
   }
 }
 
-const feedInputsAndExecuteBots = (botIsDone) => ({
-  inputs,
-  botInstructions,
-  bots = {},
-  outputs = {},
-}) => {
-  // console.log('----\nbots', bots, '\nin', inputs, '\nout', outputs) // TODO remove console.log
-  // first input, go over instructions multiple times, until all bots have < 2 items
-  // second input, go over instructions multiple times, until all bots have < 2 items
-  // at any time if any botIsDone, finish
-  if (inputs.length === 0) {
-    return { status: DONE, result: undefined }
-  }
-  const input = inputs.splice(0, 1)
-  bots = giveItemToBot(input[0].val, input[0].bot, bots)
-
-  if (botIsDone(bots[input[0].bot])) {
-    return {
-      status: DONE,
-      result: bots[input[0].bot],
-      outputs,
+const feedInputsAndExecuteBots =
+  (botIsDone) =>
+  ({ inputs, botInstructions, bots = {}, outputs = {} }) => {
+    // console.log('----\nbots', bots, '\nin', inputs, '\nout', outputs) // TODO remove console.log
+    // first input, go over instructions multiple times, until all bots have < 2 items
+    // second input, go over instructions multiple times, until all bots have < 2 items
+    // at any time if any botIsDone, finish
+    if (inputs.length === 0) {
+      return { status: DONE, result: undefined }
     }
-  }
+    const input = inputs.splice(0, 1)
+    bots = giveItemToBot(input[0].val, input[0].bot, bots)
 
-  // mutates bots and outputs in place
-  const { status, result } = executeBots({
-    bots,
-    botInstructions,
-    botIsDone,
-    outputs,
-  })
-  if (status === DONE || inputs.length === 0) {
-    return { status: DONE, result, outputs }
+    if (botIsDone(bots[input[0].bot])) {
+      return {
+        status: DONE,
+        result: bots[input[0].bot],
+        outputs,
+      }
+    }
+
+    // mutates bots and outputs in place
+    const { status, result } = executeBots({
+      bots,
+      botInstructions,
+      botIsDone,
+      outputs,
+    })
+    if (status === DONE || inputs.length === 0) {
+      return { status: DONE, result, outputs }
+    }
+    return { status, result: undefined, outputs, inputs, botInstructions, bots }
   }
-  return { status, result: undefined, outputs, inputs, botInstructions, bots }
-}
 
 const solution1 = S.pipe([
   S.lift2((inputs) => (botInstructions) => ({

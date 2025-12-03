@@ -41,19 +41,17 @@ export const compute = (data, pointer = 0) => {
   if (op === MULTIPLY) {
     data[address] = param1 * param2
   }
-  if ((pointer + 4 > data.length + 1)) {
+  if (pointer + 4 > data.length + 1) {
     return data
   }
   return compute(data, pointer + 4)
 }
 
-
 const solution1 = compose(head, compute)
 run('PART1', solution1, input)
 
 // PART 2
-const tick = ([noun, verb]) =>
-  verb < 99 ? [noun, verb + 1] : [noun + 1 , 0]
+const tick = ([noun, verb]) => (verb < 99 ? [noun, verb + 1] : [noun + 1, 0])
 
 const solution2 = (prog) => {
   const target = 19690720
@@ -62,13 +60,8 @@ const solution2 = (prog) => {
   let verb = -1
 
   while (result !== target && noun <= 99) {
-    [noun, verb] = tick([noun, verb]) // TODO make part of the loop
-    result = compose(
-      head,
-      compute,
-      update(2, verb),
-      update(1, noun),
-    )(prog)
+    ;[noun, verb] = tick([noun, verb]) // TODO make part of the loop
+    result = compose(head, compute, update(2, verb), update(1, noun))(prog)
   }
 
   if (result !== target) {

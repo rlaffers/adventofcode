@@ -47,11 +47,7 @@ const ops = {
 function unpackWhile(predicate, bits, versionSum) {
   const packetValues = []
   while (predicate({ bits, packets: packetValues.length })) {
-    let {
-      remainder: nextBits,
-      value,
-      versionSum: subsVersionSum,
-    } = unpack(bits)
+    let { remainder: nextBits, value, versionSum: subsVersionSum } = unpack(bits)
     packetValues.push(value)
     versionSum += subsVersionSum
     bits = nextBits
@@ -94,11 +90,7 @@ function unpack(packet) {
       packetValues,
       versionSum: nextVersionSum,
       bitsLeft,
-    } = unpackWhile(
-      ({ packets }) => packets < packetCount,
-      remainder,
-      versionSum,
-    )
+    } = unpackWhile(({ packets }) => packets < packetCount, remainder, versionSum)
     return {
       remainder: bitsLeft,
       value: ops[operator](packetValues),

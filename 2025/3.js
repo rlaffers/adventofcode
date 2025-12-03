@@ -6,11 +6,7 @@ const getHighestNumber = (totalDigits) => (line) => {
     throw new Error(`line too short: ${line}`)
   }
   const digits = [] // each digit is a tuple of index, value
-  for (
-    let currDigitIndex = 0;
-    currDigitIndex < totalDigits;
-    currDigitIndex += 1
-  ) {
+  for (let currDigitIndex = 0; currDigitIndex < totalDigits; currDigitIndex += 1) {
     for (
       let i = (digits[currDigitIndex - 1]?.[0] ?? -1) + 1; // start at the previous digit's index
       i <= line.length - totalDigits + currDigitIndex;

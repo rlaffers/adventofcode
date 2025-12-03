@@ -1,4 +1,3 @@
 import { readFileSync } from 'fs'
 
-export const readInput = (path, separator = '\n') =>
-  readFileSync(path).toString().split(separator)
+export const readInput = (path, separator = '\n') => readFileSync(path).toString().split(separator)

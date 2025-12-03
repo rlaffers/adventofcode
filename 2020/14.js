@@ -31,15 +31,17 @@ const applyMaskToNumber = ([white, black], number) => {
   return (number & black) | white
 }
 
-const valueEncoder = ([mask, memory]) => (line) => {
-  if (line[0] === 'mask') {
-    const nextMask = parseMask(line[1])
-    return [nextMask, memory]
+const valueEncoder =
+  ([mask, memory]) =>
+  (line) => {
+    if (line[0] === 'mask') {
+      const nextMask = parseMask(line[1])
+      return [nextMask, memory]
+    }
+    const value = applyMaskToNumber(mask, BigInt(line[2]))
+    memory[line[1]] = value
+    return [mask, memory]
   }
-  const value = applyMaskToNumber(mask, BigInt(line[2]))
-  memory[line[1]] = value
-  return [mask, memory]
-}
 
 const solution1 = S.pipe([
   S.map(parseLine),
@@ -87,27 +89,25 @@ const applyMaskToAddress = ([normalBits, floatingBits], number) => {
   if (floatingBits.length === 0) {
     addresses.push(baseNumber)
   } else {
-    addresses = permut(
-      [],
-      baseNumber.toString(2).padStart(36, '0'),
-      floatingBits,
-    )
+    addresses = permut([], baseNumber.toString(2).padStart(36, '0'), floatingBits)
   }
   return addresses
 }
 
-const memoryEncoder = ([mask, memory]) => (line) => {
-  if (line[0] === 'mask') {
-    const nextMask = parseMaskForMemory(line[1])
-    return [nextMask, memory]
+const memoryEncoder =
+  ([mask, memory]) =>
+  (line) => {
+    if (line[0] === 'mask') {
+      const nextMask = parseMaskForMemory(line[1])
+      return [nextMask, memory]
+    }
+    const addresses = applyMaskToAddress(mask, BigInt(line[1]))
+    const value = Number(line[2])
+    for (let addr of addresses) {
+      memory[addr] = value
+    }
+    return [mask, memory]
   }
-  const addresses = applyMaskToAddress(mask, BigInt(line[1]))
-  const value = Number(line[2])
-  for (let addr of addresses) {
-    memory[addr] = value
-  }
-  return [mask, memory]
-}
 
 const solution2 = S.pipe([
   S.map(parseLine),

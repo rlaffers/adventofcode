@@ -25,9 +25,7 @@ const parseChildren = (str) => {
 
 const makeGraph = S.pipe([
   S.map(S.pipe([R.match(ruleRegex), S.prop('groups')])),
-  S.map(
-    R.juxt([S.prop('parent'), S.pipe([S.prop('children'), parseChildren])]),
-  ),
+  S.map(R.juxt([S.prop('parent'), S.pipe([S.prop('children'), parseChildren])])),
   R.fromPairs,
   // S.map(S.map(R.last)),
 ])

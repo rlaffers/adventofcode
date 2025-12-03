@@ -25,12 +25,7 @@ const numbers = {
 
 // PART 2
 const solver2 = S.pipe([
-  R.map(
-    R.replace(
-      /(one|two|three|four|five|six|seven|eight|nine|zero)/g,
-      (_, n) => numbers[n],
-    ),
-  ),
+  R.map(R.replace(/(one|two|three|four|five|six|seven|eight|nine|zero)/g, (_, n) => numbers[n])),
   R.map(R.match(/\d/g)),
   // R.slice(-10, undefined),
   R.map(R.juxt([R.head, R.last])),

@@ -20,10 +20,7 @@ const input = readInput('./8_input').slice(0, -1)
 const countUniqueDigitsInOutput = (segments) => {
   return S.pipe([
     R.takeLast(4),
-    R.filter(
-      (x) =>
-        x.length === 2 || x.length === 3 || x.length === 4 || x.length === 7,
-    ),
+    R.filter((x) => x.length === 2 || x.length === 3 || x.length === 4 || x.length === 7),
     R.length,
   ])(segments)
 }
@@ -89,10 +86,7 @@ const findWireMappings = ({ digit1, digit4, digit7, digit8, signals }) => {
     ])(x),
   )
 
-  wires.b = R.difference(
-    R.difference(digit8, digit7),
-    wires.d.concat(wires.e, wires.g),
-  )
+  wires.b = R.difference(R.difference(digit8, digit7), wires.d.concat(wires.e, wires.g))
 
   const digit6 = alphabet
     .filter((x) => x.length === 6)

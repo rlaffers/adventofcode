@@ -63,9 +63,7 @@ function updateSeating({ seating, status = PENDING }) {
     let nextRow = seating[i + 1]
     nextSeating.push(updateRow(row, prevRow, nextRow))
   }
-  const seatingHasNotChanged = nextSeating.every((row, idx) =>
-    R.equals(row, seating[idx]),
-  )
+  const seatingHasNotChanged = nextSeating.every((row, idx) => R.equals(row, seating[idx]))
   return { seating: nextSeating, status: seatingHasNotChanged ? DONE : PENDING }
 }
 
@@ -155,13 +153,7 @@ function updateRowFussy(rowIndex, row, prevRows = [], nextRows = []) {
   const updatedRow = []
   for (let colIndex = 0, l = row.length; colIndex < l; colIndex++) {
     let spot = row[colIndex]
-    let occupancy = countFirstSeenOccupancy(
-      rowIndex,
-      colIndex,
-      row,
-      prevRows,
-      nextRows,
-    )
+    let occupancy = countFirstSeenOccupancy(rowIndex, colIndex, row, prevRows, nextRows)
     if (spot === 'L' && occupancy === 0) {
       updatedRow.push('#')
     } else if (spot === '#' && occupancy >= 5) {
@@ -181,9 +173,7 @@ function updateSeatingFussy({ seating, status = PENDING }) {
     let nextRows = seating.slice(rowIndex + 1, seating.length)
     nextSeating.push(updateRowFussy(rowIndex, row, prevRows, nextRows))
   }
-  const seatingHasNotChanged = nextSeating.every((row, idx) =>
-    R.equals(row, seating[idx]),
-  )
+  const seatingHasNotChanged = nextSeating.every((row, idx) => R.equals(row, seating[idx]))
   return { seating: nextSeating, status: seatingHasNotChanged ? DONE : PENDING }
 }
 

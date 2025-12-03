@@ -38,9 +38,9 @@ const buildTree = (numbers) => {
 const root = buildTree(input)
 
 // PART 1 ====
-const metaSum = nodes => {
+const metaSum = (nodes) => {
   let sum = 0
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     sum += node.meta.reduce(add, 0)
     sum += metaSum(node.children)
   })
@@ -49,13 +49,13 @@ const metaSum = nodes => {
 console.log(metaSum([root]))
 
 // PART 2 ====
-const nodeValue = node => {
+const nodeValue = (node) => {
   if (node.children.length === 0) {
     return node.meta.reduce(add, 0)
   }
   // node has some children, so we get a value for each referenced child
   let value = 0
-  node.meta.forEach(idx => {
+  node.meta.forEach((idx) => {
     const child = node.children[idx - 1]
     if (child === undefined) {
       return

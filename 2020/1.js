@@ -24,7 +24,7 @@ const l = input.length
 let first, second
 MAIN: for (let i = 0; i < l; i++) {
   first = input[i]
-  for (let j = 0; j < l ; j++) {
+  for (let j = 0; j < l; j++) {
     second = input[j]
     if (first + second === 2020) {
       break MAIN
@@ -44,7 +44,7 @@ if (first === null || second === null) {
 let third
 MAIN: for (let i = 0; i < l; i++) {
   first = input[i]
-  for (let j = 0; j < l ; j++) {
+  for (let j = 0; j < l; j++) {
     second = input[j]
     for (let k = 0; k < l; k++) {
       third = input[k]

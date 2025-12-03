@@ -42,12 +42,7 @@ function getCoordinates(list) {
 const wrap = (x) => [x]
 
 // PART 1
-const solver1 = S.pipe([
-  R.map(R.compose(wrap, Number)),
-  mix,
-  getCoordinates,
-  R.sum,
-])
+const solver1 = S.pipe([R.map(R.compose(wrap, Number)), mix, getCoordinates, R.sum])
 
 // PART 2
 const decryptionKey = 811589153

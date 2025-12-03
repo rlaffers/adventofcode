@@ -3,13 +3,8 @@ import { run, readInput } from '../common'
 
 const input = readInput('./1_input').slice(0, -1).map(Number)
 
-
 // PART 1
-const massToFuel = compose(
-  flip(subtract)(2),
-  Math.floor,
-  flip(divide)(3),
-)
+const massToFuel = compose(flip(subtract)(2), Math.floor, flip(divide)(3))
 
 const solution1 = reduce(useWith(add, [identity, massToFuel]), 0)
 run('PART1', solution1, input)
@@ -22,4 +17,3 @@ const massToFuelRecursive = (mass) => {
 
 const solution2 = reduce(useWith(add, [identity, massToFuelRecursive]), 0)
 run('PART2', solution2, input)
-

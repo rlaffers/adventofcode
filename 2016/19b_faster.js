@@ -3,11 +3,10 @@
 // The closest preceding y=x point to x=3014387 is x=1594323
 // From there add 1 with each x step until reaching the previous maximum, then add 2 until target
 // number of elves
-var start = 1594324; // this is when elf 1 wins
+var start = 1594324 // this is when elf 1 wins
 // target number of elves
-var target = 3014387;
+var target = 3014387
 
-var result = 1 + (target - start);
+var result = 1 + (target - start)
 
-console.log("result=" + result);
-
+console.log('result=' + result)

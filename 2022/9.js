@@ -45,10 +45,8 @@ function moveDiagonally(knot, prevKnot) {
 
 const moveKnot = (prevKnot, knot) => {
   if (adjacent(knot, prevKnot)) return knot
-  if (sameRow(knot, prevKnot))
-    return R.adjust(0, knot[0] < prevKnot[0] ? R.dec : R.inc, prevKnot)
-  if (sameCol(knot, prevKnot))
-    return R.adjust(1, knot[1] < prevKnot[1] ? R.dec : R.inc, prevKnot)
+  if (sameRow(knot, prevKnot)) return R.adjust(0, knot[0] < prevKnot[0] ? R.dec : R.inc, prevKnot)
+  if (sameCol(knot, prevKnot)) return R.adjust(1, knot[1] < prevKnot[1] ? R.dec : R.inc, prevKnot)
   return moveDiagonally(knot, prevKnot)
 }
 

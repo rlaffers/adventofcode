@@ -59,7 +59,6 @@ const makePointsFromInstruction = (instruction, [startX, startY]) => {
   return points
 }
 
-
 /**
  * @param {Array<string>} instructions
  * @returns {Map<number, string>}
@@ -103,13 +102,10 @@ const dedupePoints = (points) => {
 
 const getDistance = ([x, y]) => Math.abs(x) + Math.abs(y)
 
-const crossings = converge(
-  findCrossings,
-  [
-    pipe(head, split(','), instructionsToPoints, dedupePoints),
-    pipe(nth(1), split(','), instructionsToPoints, dedupePoints),
-  ],
-)(input)
+const crossings = converge(findCrossings, [
+  pipe(head, split(','), instructionsToPoints, dedupePoints),
+  pipe(nth(1), split(','), instructionsToPoints, dedupePoints),
+])(input)
 
 const solution1 = pipe(
   Array.from,

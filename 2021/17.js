@@ -25,8 +25,7 @@ const ySpeedRange = ({ y1, y2 }) => {
   return [min, max]
 }
 
-const isHit = (x, y, target) =>
-  x >= target.x1 && x <= target.x2 && y >= target.y1 && y <= target.y2
+const isHit = (x, y, target) => x >= target.x1 && x <= target.x2 && y >= target.y1 && y <= target.y2
 
 const canHitTarget = (dx, dy, target) => {
   let x = 0,
@@ -59,8 +58,6 @@ const solver2 = S.ap(tryAllSpeeds)(S.lift2(R.pair)(xSpeedRange)(ySpeedRange))
 
 export const solvers = [solver1, solver2]
 export const parser = (text) => {
-  const [, x1, x2, y1, y2] = text.match(
-    /x=(\d+)\.\.(\d+).*y=([-\d]+)\.\.([-\d]+)/,
-  )
+  const [, x1, x2, y1, y2] = text.match(/x=(\d+)\.\.(\d+).*y=([-\d]+)\.\.([-\d]+)/)
   return R.map(Number, { x1, x2, y1, y2 })
 }

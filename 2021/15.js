@@ -8,14 +8,10 @@ const createAdjacencyMatrix = (lines) =>
     for (let x = 0, l = line.length; x < l; x += 1) {
       const v = vertex(x, y)
       if (matrix[v] === undefined) matrix[v] = {}
-      if (line[x + 1] !== undefined)
-        matrix[v][vertex(x + 1, y)] = Number(line[x + 1])
-      if (line[x - 1] !== undefined)
-        matrix[v][vertex(x - 1, y)] = Number(line[x - 1])
-      if (lines[y - 1] !== undefined)
-        matrix[v][vertex(x, y - 1)] = Number(lines[y - 1][x])
-      if (lines[y + 1] !== undefined)
-        matrix[v][vertex(x, y + 1)] = Number(lines[y + 1][x])
+      if (line[x + 1] !== undefined) matrix[v][vertex(x + 1, y)] = Number(line[x + 1])
+      if (line[x - 1] !== undefined) matrix[v][vertex(x - 1, y)] = Number(line[x - 1])
+      if (lines[y - 1] !== undefined) matrix[v][vertex(x, y - 1)] = Number(lines[y - 1][x])
+      if (lines[y + 1] !== undefined) matrix[v][vertex(x, y + 1)] = Number(lines[y + 1][x])
     }
     return matrix
   }, {})

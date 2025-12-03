@@ -50,8 +50,7 @@ const shapeToSelect = {
   'C Z': 'A',
 }
 
-const getScore2 = (line) =>
-  outcomeScores[line[2]] + shapeScores[shapeToSelect[line]]
+const getScore2 = (line) => outcomeScores[line[2]] + shapeScores[shapeToSelect[line]]
 
 const solver2 = S.pipe([
   //

@@ -81,10 +81,8 @@ const findFirstCommonNode = pipe([
 const solution2 = (input) => {
   const commonNode = findFirstCommonNode(input)
   const nodes = makeGraph(input)
-  const myTransfers =
-    countEdgesToTarget(commonNode)('YOU', undefined, nodes) - 2
-  const sanTransfers =
-    countEdgesToTarget(commonNode)('SAN', undefined, nodes) - 2
+  const myTransfers = countEdgesToTarget(commonNode)('YOU', undefined, nodes) - 2
+  const sanTransfers = countEdgesToTarget(commonNode)('SAN', undefined, nodes) - 2
   return myTransfers + sanTransfers
 }
 

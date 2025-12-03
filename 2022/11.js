@@ -15,8 +15,7 @@ function parseMonkey(lines) {
   if (operation[2] === '+') {
     op = operation[3] === 'old' ? (x) => x.plus(x) : (x) => x.plus(operation[3])
   } else {
-    op =
-      operation[3] === 'old' ? (x) => x.times(x) : (x) => x.times(operation[3])
+    op = operation[3] === 'old' ? (x) => x.times(x) : (x) => x.times(operation[3])
   }
 
   return {

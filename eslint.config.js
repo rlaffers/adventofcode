@@ -21,6 +21,7 @@ export default defineConfig([
     rules: {
       'no-unused-vars': 0,
       '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: true }],
+      '@stylistic/arrow-parens': ['error', 'always'],
     },
   },
 ])

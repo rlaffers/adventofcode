@@ -29,9 +29,8 @@ const countTrees = (stepRight, stepDown) => (rows) => {
 
 run('PART1', countTrees(3, 1), input)
 
-const countTreesForSlopes = (slopes) => (rows) => slopes.map(
-  ([right, down]) => countTrees(right, down)(rows),
-)
+const countTreesForSlopes = (slopes) => (rows) =>
+  slopes.map(([right, down]) => countTrees(right, down)(rows))
 
 const slopesToCheck = [
   [1, 1],

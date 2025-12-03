@@ -32,11 +32,6 @@ const solve = (rows) =>
     return sizes
   }, [])
 
-const solution2 = S.pipe([
-  solve,
-  R.sort(R.subtract),
-  R.takeLast(3),
-  R.reduce(R.multiply, 1),
-])
+const solution2 = S.pipe([solve, R.sort(R.subtract), R.takeLast(3), R.reduce(R.multiply, 1)])
 
 run('PART2', solution2, input)

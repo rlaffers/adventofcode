@@ -84,12 +84,7 @@ function _simulate(timeLeft, store, costs, speeds) {
     }
 
     // consider maxGeodes when nothing is built
-    const geodesWhenNothingBuiltHere = simulate(
-      timeLeft - 1,
-      add(store, speeds),
-      costs,
-      speeds,
-    )[3]
+    const geodesWhenNothingBuiltHere = simulate(timeLeft - 1, add(store, speeds), costs, speeds)[3]
     if (geodesWhenNothingBuiltHere > maxGeodes) {
       bestRobotToBuild = null
     }
@@ -111,11 +106,7 @@ function _simulate(timeLeft, store, costs, speeds) {
 const solver1 = S.pipe([
   //
   R.filter(Boolean),
-  R.map(
-    R.match(
-      /(\d+) ore\..*(\d+) ore\..*costs (\d+) ore and (\d+).*costs (\d+) ore and (\d+)/,
-    ),
-  ),
+  R.map(R.match(/(\d+) ore\..*(\d+) ore\..*costs (\d+) ore and (\d+).*costs (\d+) ore and (\d+)/)),
   R.map(R.pipe(R.tail, R.map(Number))),
   R.map((costs) => simulate(24, [0, 0, 0, 0], costs, [1, 0, 0, 0])),
 ])

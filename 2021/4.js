@@ -118,11 +118,7 @@ const calculateScore = ([board, drawnNumber]) => {
   throw new Error('Board is not completed')
 }
 
-const solution1 = S.pipe([
-  parseNumbersAndBoards,
-  findWinningBoard,
-  calculateScore,
-])
+const solution1 = S.pipe([parseNumbersAndBoards, findWinningBoard, calculateScore])
 
 run('PART1', solution1, input)
 
@@ -139,24 +135,13 @@ const findLastWinningBoard = ([numbers, boards, completedBoards = []]) => {
 
   const currentCompletedBoards = findAllCompletedBoards(boards)
   if (currentCompletedBoards.length >= boards.length) {
-    const latestCompleted = R.difference(
-      currentCompletedBoards,
-      completedBoards,
-    )
+    const latestCompleted = R.difference(currentCompletedBoards, completedBoards)
     return [R.head(latestCompleted), drawnNumber]
   }
 
-  return findLastWinningBoard([
-    remainingNumbers,
-    boards,
-    currentCompletedBoards,
-  ])
+  return findLastWinningBoard([remainingNumbers, boards, currentCompletedBoards])
 }
 
-const solution2 = S.pipe([
-  parseNumbersAndBoards,
-  findLastWinningBoard,
-  calculateScore,
-])
+const solution2 = S.pipe([parseNumbersAndBoards, findLastWinningBoard, calculateScore])
 
 run('PART2', solution2, input)

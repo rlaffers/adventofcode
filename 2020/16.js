@@ -18,17 +18,8 @@ nearby tickets:
 const between = (min, max) => (x) => x >= min && x <= max
 
 const parseRule = (line) => {
-  const [, field, min1, max1, min2, max2] = R.match(
-    /^([\w\s]+): (\d+)-(\d+) or (\d+)-(\d+)/,
-    line,
-  )
-  return [
-    field,
-    R.either(
-      between(Number(min1), Number(max1)),
-      between(Number(min2), Number(max2)),
-    ),
-  ]
+  const [, field, min1, max1, min2, max2] = R.match(/^([\w\s]+): (\d+)-(\d+) or (\d+)-(\d+)/, line)
+  return [field, R.either(between(Number(min1), Number(max1)), between(Number(min2), Number(max2)))]
 }
 
 const parseTicket = S.compose(S.map(Number))(S.splitOn(','))
@@ -107,8 +98,7 @@ const iterateUntilAllFieldsHavePosition = (allPossiblePositions) => {
   }, {})
 
   const usedPositions = []
-  const someFieldPositionsUnknown = (o) =>
-    Object.values(o).some((x) => x === null)
+  const someFieldPositionsUnknown = (o) => Object.values(o).some((x) => x === null)
 
   let previousUsedPositionsLength = usedPositions.length
   while (someFieldPositionsUnknown(finalPositions)) {
@@ -131,25 +121,23 @@ const iterateUntilAllFieldsHavePosition = (allPossiblePositions) => {
 }
 
 const rulesIntoFieldIndices = (rules) => (validTickets) => {
-  const allPossiblePositions = Object.entries(rules).map(
-    ([fieldName, validator]) => {
-      const intersectValidPositions = (validPositions, ticket) => {
-        const validPositionsThisTicket = ticket.reduce((acc, value, index) => {
-          if (validator(value)) {
-            acc.push(index)
-          }
-          return acc
-        }, [])
-        return R.intersection(validPositions, validPositionsThisTicket)
-      }
+  const allPossiblePositions = Object.entries(rules).map(([fieldName, validator]) => {
+    const intersectValidPositions = (validPositions, ticket) => {
+      const validPositionsThisTicket = ticket.reduce((acc, value, index) => {
+        if (validator(value)) {
+          acc.push(index)
+        }
+        return acc
+      }, [])
+      return R.intersection(validPositions, validPositionsThisTicket)
+    }
 
-      const possibleFieldPositions = validTickets.reduce(
-        intersectValidPositions,
-        R.keys(validTickets[0]).map(Number),
-      )
-      return [fieldName, possibleFieldPositions]
-    },
-  )
+    const possibleFieldPositions = validTickets.reduce(
+      intersectValidPositions,
+      R.keys(validTickets[0]).map(Number),
+    )
+    return [fieldName, possibleFieldPositions]
+  })
 
   const finalPositions = iterateUntilAllFieldsHavePosition(allPossiblePositions)
   return finalPositions

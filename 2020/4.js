@@ -66,22 +66,14 @@ const input = readInput('./4_input', '\n\n').map(replace(/\s/g, ' '))
 const credentialsFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
 const passportFields = [...credentialsFields, 'cid']
 
-const isValid = (requiredFields) => (record) =>
-  requiredFields.every((k) => record[k] !== undefined)
-const isValidPassportOrCredential = anyPass([
-  isValid(passportFields),
-  isValid(credentialsFields),
-])
+const isValid = (requiredFields) => (record) => requiredFields.every((k) => record[k] !== undefined)
+const isValidPassportOrCredential = anyPass([isValid(passportFields), isValid(credentialsFields)])
 const parseRecord = (record) => {
   const results = match(/[a-z]{3}:[#\w]+/g, record).map(split(':'))
   return fromPairs(results)
 }
 
-const solution1 = pipe([
-  map(parseRecord),
-  filter(isValidPassportOrCredential),
-  length,
-])
+const solution1 = pipe([map(parseRecord), filter(isValidPassportOrCredential), length])
 
 run('PART1', solution1, input)
 

@@ -88,9 +88,9 @@ const findRating = (remainingNumbers, position = 0, getRelevantValue) => {
   if (remainingNumbers.length <= 1) {
     return remainingNumbers
   }
-  const freqs = S.reduce(countDigitFreq)(
-    makeInitialFreq(R.head(remainingNumbers).length),
-  )(remainingNumbers)
+  const freqs = S.reduce(countDigitFreq)(makeInitialFreq(R.head(remainingNumbers).length))(
+    remainingNumbers,
+  )
   const relevantValue = getRelevantValue(freqs, position)
 
   return findRating(

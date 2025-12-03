@@ -14,11 +14,7 @@ const passwordIsValid = ([, min, max, char, password]) => {
   return count >= min && count <= max
 }
 
-const solution1 = pipe([
-  map(parseLine),
-  filter(passwordIsValid),
-  length,
-])
+const solution1 = pipe([map(parseLine), filter(passwordIsValid), length])
 
 run('PART1', solution1, input)
 
@@ -29,9 +25,5 @@ const passwordIsValid2 = ([, pos1, pos2, char, password]) => {
   return count === 1
 }
 
-const solution2 = pipe([
-  map(parseLine),
-  filter(passwordIsValid2),
-  length,
-])
+const solution2 = pipe([map(parseLine), filter(passwordIsValid2), length])
 run('PART2', solution2, input)

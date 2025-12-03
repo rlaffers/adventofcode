@@ -15,7 +15,7 @@ const digitsAreNotDecreasing = (str) => {
   return true
 }
 
-const containsRepeatedDigit = str => {
+const containsRepeatedDigit = (str) => {
   for (let i = 0, l = str.length; i < l; i++) {
     let char = str[i]
     let prevChar = str[i - 1]
@@ -25,7 +25,6 @@ const containsRepeatedDigit = str => {
   }
   return false
 }
-
 
 const passwordGenerator = function* (start, end) {
   if (start > end) {
@@ -39,7 +38,7 @@ const passwordGenerator = function* (start, end) {
 }
 
 // items is iterator yield numeric strings
-const countPassed = predicate => items => {
+const countPassed = (predicate) => (items) => {
   let count = 0
   for (let item of items) {
     if (predicate(String(item))) {
@@ -59,7 +58,7 @@ const solution1 = compose(
 run('PART1', solution1, input)
 
 // PART2
-const containsDouble = str => {
+const containsDouble = (str) => {
   for (let i = 0, l = str.length; i < l; i++) {
     let char = str[i]
     let prevChar = str[i - 1]

@@ -219,13 +219,7 @@ for (var i = 0; i < steps.length; i++) {
   }
   var distance = Math.abs(newPosition[0]) + Math.abs(newPosition[1])
   console.log(
-    i +
-      '. new position ' +
-      newPosition +
-      ', distance ' +
-      distance +
-      ', facing ' +
-      sides[facing],
+    i + '. new position ' + newPosition + ', distance ' + distance + ', facing ' + sides[facing],
   )
 
   // save all visited places since the previous position

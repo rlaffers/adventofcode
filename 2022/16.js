@@ -27,14 +27,7 @@ function makeGraphAndValueMap(vx) {
   return { g, valveSizes }
 }
 
-function findNextValveWithMaxValue(
-  g,
-  valveSizes,
-  currentValve,
-  openValves,
-  time,
-  depth = 1,
-) {
+function findNextValveWithMaxValue(g, valveSizes, currentValve, openValves, time, depth = 1) {
   // console.log(pad(3 - depth) + `${3 - depth}. current: ${currentValve}`)
   // the next valve must be reachable within time-2 to get a minimum of 1 minute of flow
   // it must not be among openValves
@@ -123,11 +116,7 @@ function findNextGoThereAndOpen(g, valveSizes, currentValve, openValves, time) {
 
   if (!next) {
     // no time to open another valve, but calculate the remaining time * open valves
-    console.log(
-      colors.yellow(
-        `no next, remaining time: ${time}, openValves: ${openValves.length}`,
-      ),
-    )
+    console.log(colors.yellow(`no next, remaining time: ${time}, openValves: ${openValves.length}`))
     return calcReleased(openValves, time, valveSizes)
   }
   // move to next and open this valve
@@ -140,9 +129,7 @@ function findNextGoThereAndOpen(g, valveSizes, currentValve, openValves, time) {
       `→ position: ${next} released during last move: ${released} time: ${time} open: ${openValves.length}`,
     ),
   )
-  return (
-    released + findNextGoThereAndOpen(g, valveSizes, next, openValves, time)
-  )
+  return released + findNextGoThereAndOpen(g, valveSizes, next, openValves, time)
 }
 
 function calcReleasedPressure({ g, valveSizes }) {
@@ -152,13 +139,7 @@ function calcReleasedPressure({ g, valveSizes }) {
 // PART 1
 const solver1 = R.pipe(
   R.map(R.match(/\s([A-Z]{2})\s.*rate=(\d+).*to\svalves?\s(.*)/)),
-  R.map(
-    R.pipe(
-      R.tail,
-      R.adjust(1, Number),
-      R.adjust(2, R.pipe(R.split(','), R.map(R.trim))),
-    ),
-  ),
+  R.map(R.pipe(R.tail, R.adjust(1, Number), R.adjust(2, R.pipe(R.split(','), R.map(R.trim))))),
   makeGraphAndValueMap,
   calcReleasedPressure,
 )
@@ -167,24 +148,10 @@ const solver1 = R.pipe(
 function calcReleasedPressureWithElephant({ g, valveSizes }) {
   let time = 26
   const me = findNextValveWithMaxValue(g, valveSizes, 'AA', [], time, 15)
-  const elephant = findNextValveWithMaxValue(
-    g,
-    valveSizes,
-    'AA',
-    [me.next],
-    time,
-    15,
-  )
+  const elephant = findNextValveWithMaxValue(g, valveSizes, 'AA', [me.next], time, 15)
 
   // now jump
-  return jumpToClosestTargetAndAccumReleased(
-    g,
-    valveSizes,
-    time,
-    [],
-    { me, elephant },
-    15,
-  )
+  return jumpToClosestTargetAndAccumReleased(g, valveSizes, time, [], { me, elephant }, 15)
 }
 
 function jumpToClosestTargetAndAccumReleased(
@@ -199,25 +166,17 @@ function jumpToClosestTargetAndAccumReleased(
 
   if (me.next === null && elephant.next === null) {
     console.log(
-      colors.yellow(
-        `no targets, remaining time: ${time}, openValves: ${openValves.length}`,
-      ),
+      colors.yellow(`no targets, remaining time: ${time}, openValves: ${openValves.length}`),
     )
     return calcReleased(openValves, time, valveSizes)
   }
   if (me.next === null) {
     console.log(
-      colors.yellow(
-        `no next for me, remaining time: ${time}, openValves: ${openValves.length}`,
-      ),
+      colors.yellow(`no next for me, remaining time: ${time}, openValves: ${openValves.length}`),
     )
     // let the elephant move and open the valve
     time -= elephant.travelTime + 1
-    const released = calcReleased(
-      openValves,
-      elephant.travelTime + 1,
-      valveSizes,
-    )
+    const released = calcReleased(openValves, elephant.travelTime + 1, valveSizes)
     openValves.push(elephant.next)
     return (
       released +
@@ -256,9 +215,7 @@ function jumpToClosestTargetAndAccumReleased(
 
   if (me.travelTime < elephant.travelTime) {
     time -= me.travelTime + 1
-    console.log(
-      colors.brightBlue(`reached my target first ${me.next} time: ${time}`),
-    )
+    console.log(colors.brightBlue(`reached my target first ${me.next} time: ${time}`))
     const released = calcReleased(openValves, me.travelTime + 1, valveSizes)
     openValves.push(me.next)
     // update elephants travel time
@@ -266,14 +223,7 @@ function jumpToClosestTargetAndAccumReleased(
     // move elephant along its path towards elephant.next during time me.travelTime + 1
     elephant.path = elephant.path.slice(me.travelTime + 1)
     // find my new target
-    let meNext = findNextValveWithMaxValue(
-      g,
-      valveSizes,
-      me.next,
-      openValves,
-      time,
-      depth,
-    )
+    let meNext = findNextValveWithMaxValue(g, valveSizes, me.next, openValves, time, depth)
     if (meNext.next === null) {
       // if no more targets for me, let the elephant finish
       return (
@@ -333,16 +283,8 @@ function jumpToClosestTargetAndAccumReleased(
     )
   } else if (me.travelTime > elephant.travelTime) {
     time -= elephant.travelTime + 1
-    console.log(
-      colors.blue(
-        `reached elephant target first ${elephant.next} time: ${time}`,
-      ),
-    )
-    const released = calcReleased(
-      openValves,
-      elephant.travelTime + 1,
-      valveSizes,
-    )
+    console.log(colors.blue(`reached elephant target first ${elephant.next} time: ${time}`))
+    const released = calcReleased(openValves, elephant.travelTime + 1, valveSizes)
     openValves.push(elephant.next)
     // update my travel time
     me.travelTime = me.travelTime - elephant.travelTime - 1
@@ -421,23 +363,12 @@ function jumpToClosestTargetAndAccumReleased(
   } else {
     // both targets are the same distance
     time -= me.travelTime + 1
-    console.log(
-      colors.magenta(
-        `reached both targets ${me.next},${elephant.next} time: ${time}`,
-      ),
-    )
+    console.log(colors.magenta(`reached both targets ${me.next},${elephant.next} time: ${time}`))
     const released = calcReleased(openValves, me.travelTime + 1, valveSizes)
     openValves.push(me.next)
     openValves.push(elephant.next)
     // find elephant's new target
-    let meNext = findNextValveWithMaxValue(
-      g,
-      valveSizes,
-      me.next,
-      openValves,
-      time,
-      depth,
-    )
+    let meNext = findNextValveWithMaxValue(g, valveSizes, me.next, openValves, time, depth)
     // elephant may be able to get to meNext.next sooner than me
     let elephantNext = findNextValveWithMaxValue(
       g,
@@ -474,9 +405,7 @@ function jumpToClosestTargetAndAccumReleased(
       }
     }
 
-    console.log(
-      colors.magenta(`next targets ${meNext.next}, ${elephantNext.next}`),
-    )
+    console.log(colors.magenta(`next targets ${meNext.next}, ${elephantNext.next}`))
 
     return (
       released +
@@ -497,13 +426,7 @@ function jumpToClosestTargetAndAccumReleased(
 
 const solver2 = S.pipe([
   R.map(R.match(/\s([A-Z]{2})\s.*rate=(\d+).*to\svalves?\s(.*)/)),
-  R.map(
-    R.pipe(
-      R.tail,
-      R.adjust(1, Number),
-      R.adjust(2, R.pipe(R.split(','), R.map(R.trim))),
-    ),
-  ),
+  R.map(R.pipe(R.tail, R.adjust(1, Number), R.adjust(2, R.pipe(R.split(','), R.map(R.trim))))),
   makeGraphAndValueMap,
   calcReleasedPressureWithElephant,
 ])

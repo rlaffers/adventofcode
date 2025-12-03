@@ -62,16 +62,10 @@ const makePolymer = (tpl) => {
   return polymer
 }
 
-const makePolymerizationPairRules = R.reduce(
-  (rules, [sourcePair, inserted]) => {
-    rules[sourcePair] = [
-      `${sourcePair[0]}${inserted}`,
-      `${inserted}${sourcePair[1]}`,
-    ]
-    return rules
-  },
-  {},
-)
+const makePolymerizationPairRules = R.reduce((rules, [sourcePair, inserted]) => {
+  rules[sourcePair] = [`${sourcePair[0]}${inserted}`, `${inserted}${sourcePair[1]}`]
+  return rules
+}, {})
 
 const polymerizePairs =
   (steps) =>
@@ -85,16 +79,13 @@ const polymerizePairs =
           continue
         }
         const [nextPair1, nextPair2] = rules[sourcePair]
-        if (nextPolymer.pairs[nextPair1] === undefined)
-          nextPolymer.pairs[nextPair1] = 0
+        if (nextPolymer.pairs[nextPair1] === undefined) nextPolymer.pairs[nextPair1] = 0
         nextPolymer.pairs[nextPair1] += polymer.pairs[sourcePair]
-        if (nextPolymer.pairs[nextPair2] === undefined)
-          nextPolymer.pairs[nextPair2] = 0
+        if (nextPolymer.pairs[nextPair2] === undefined) nextPolymer.pairs[nextPair2] = 0
         nextPolymer.pairs[nextPair2] += polymer.pairs[sourcePair]
         // inc element count
         const [, newElement] = nextPair1
-        if (nextPolymer.elements[newElement] === undefined)
-          nextPolymer.elements[newElement] = 0
+        if (nextPolymer.elements[newElement] === undefined) nextPolymer.elements[newElement] = 0
         nextPolymer.elements[newElement] += polymer.pairs[sourcePair]
       }
       polymer = nextPolymer
@@ -104,10 +95,7 @@ const polymerizePairs =
   }
 
 const solver2 = S.pipe([
-  ({ tpl, rules }) => [
-    makePolymer(tpl),
-    S.pipe([R.toPairs, makePolymerizationPairRules])(rules),
-  ],
+  ({ tpl, rules }) => [makePolymer(tpl), S.pipe([R.toPairs, makePolymerizationPairRules])(rules)],
   polymerizePairs(40),
   R.prop('elements'),
   getMinMax,

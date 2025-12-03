@@ -1,15 +1,4 @@
-import {
-  head,
-  compose,
-  update,
-  add,
-  multiply,
-  split,
-  match,
-  reverse,
-  map,
-  curry,
-} from 'ramda'
+import { head, compose, update, add, multiply, split, match, reverse, map, curry } from 'ramda'
 import { pipe } from 'sanctuary'
 
 // PART 1
@@ -237,9 +226,7 @@ export const computor = (data) => {
       op !== LESS_THAN &&
       op !== EQUALS
     ) {
-      throw new Error(
-        `Invalid operation ${op} encountered at address ${pointer}`,
-      )
+      throw new Error(`Invalid operation ${op} encountered at address ${pointer}`)
     }
     if (op === HALT) {
       run.halted = true
@@ -252,12 +239,14 @@ export const computor = (data) => {
       }
     }
 
-    const {
-      calculateResult,
-      params,
-      handleResult,
-      getNextPointer,
-    } = prepareComputation(op, data, pointer, modes, stdout, stdin)
+    const { calculateResult, params, handleResult, getNextPointer } = prepareComputation(
+      op,
+      data,
+      pointer,
+      modes,
+      stdout,
+      stdin,
+    )
 
     handleResult(calculateResult(...params))
     pointer = getNextPointer()

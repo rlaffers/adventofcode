@@ -136,10 +136,7 @@ solution1(input)
  * @param {Array<guardID, Array>number>>}
  * @returns {Array<guardID, bestMinute, sleepCount>} Returns new sleeping champion.
  */
-const mostRegularSleeperStrategy = (
-  currentChampion,
-  [guardID, guardMinutes],
-) => {
+const mostRegularSleeperStrategy = (currentChampion, [guardID, guardMinutes]) => {
   const [minute, sleepCount] = findSleepyMinute(guardMinutes)
   if (sleepCount > currentChampion[2]) {
     currentChampion[0] = Number(guardID)

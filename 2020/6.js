@@ -30,12 +30,7 @@ b
 `.split('\n\n')
 const input = readInput('./6_input', '\n\n')
 
-const solution1 = pipe([
-  map(replace(/\s/g, '')),
-  map(uniq),
-  map(length),
-  reduce(add)(0),
-])
+const solution1 = pipe([map(replace(/\s/g, '')), map(uniq), map(length), reduce(add)(0)])
 
 run('PART1', solution1, input)
 

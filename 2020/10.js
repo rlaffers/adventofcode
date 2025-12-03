@@ -101,12 +101,9 @@ const getNextValidItems = (current, set) => {
   return []
 }
 
-const countValidVariationsMemo = memoize(
-  countValidVariations,
-  (current, set) => {
-    return `${current},${set.join()}`
-  },
-)
+const countValidVariationsMemo = memoize(countValidVariations, (current, set) => {
+  return `${current},${set.join()}`
+})
 
 function countValidVariations(current, set, finalItem) {
   if (current === finalItem) {
@@ -120,11 +117,7 @@ function countValidVariations(current, set, finalItem) {
   let count = 0
   let allBranchesInvalid = true
   for (let i = 0, l = nextItems.length; i < l; i++) {
-    let subcount = countValidVariationsMemo(
-      nextItems[i],
-      set.slice(i + 1),
-      finalItem,
-    )
+    let subcount = countValidVariationsMemo(nextItems[i], set.slice(i + 1), finalItem)
     if (subcount === -1) {
       // this arrangement is invalid, hope is not lost but we will note it
     } else {

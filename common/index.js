@@ -2,12 +2,9 @@ import { curry, invoker } from 'ramda'
 import S from 'sanctuary'
 import { readFileSync } from 'fs'
 
-export const run = curry((label, solver, input) =>
-  console.log(label, solver(input)),
-)
+export const run = curry((label, solver, input) => console.log(label, solver(input)))
 
-export const readInput = (path, separator = '\n') =>
-  readFileSync(path).toString().split(separator)
+export const readInput = (path, separator = '\n') => readFileSync(path).toString().split(separator)
 
 export const readLines = S.pipe([readFileSync, invoker(0, 'toString'), S.lines])
 

@@ -1,7 +1,21 @@
-import { curry, compose, converge, map, lt, filter, reduce, length, pickBy, keys, head, add, intersection } from 'ramda'
+import {
+  curry,
+  compose,
+  converge,
+  map,
+  lt,
+  filter,
+  reduce,
+  length,
+  pickBy,
+  keys,
+  head,
+  add,
+  intersection,
+} from 'ramda'
 import { readFileSync } from 'fs'
 // square is defined as [x, y, a, b]
-const strToClaim = str => {
+const strToClaim = (str) => {
   const match = str.match(/@\s(\d+),(\d+):\s(\d+)x(\d+)/)
   return match ? [Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4])] : null
 }
@@ -21,7 +35,7 @@ const getSquares = ([xStart, yStart, width, height]) => {
   return squares
 }
 
-const mergeInto = squares => square => {
+const mergeInto = (squares) => (square) => {
   if (squares[square]) {
     squares[square] += 1
   } else {
@@ -45,16 +59,13 @@ const solution1 = compose(
 solution1(input)
 
 // PART 2 =======================================
-const getOverlappedSquares = compose(
-  pickBy(lt(1)),
-  reduce(countSquareOverlaps, {}),
-)
+const getOverlappedSquares = compose(pickBy(lt(1)), reduce(countSquareOverlaps, {}))
 
-const noOverlap = obj => arr2 => arr2.every(x => obj[x] === undefined)
+const noOverlap = (obj) => (arr2) => arr2.every((x) => obj[x] === undefined)
 
 const solution2 = compose(
   console.log,
-  add(1),  // IDs are 1-based
+  add(1), // IDs are 1-based
   head,
   keys,
   filter(noOverlap(getOverlappedSquares(input))),

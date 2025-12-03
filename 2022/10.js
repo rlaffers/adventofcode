@@ -36,12 +36,7 @@ function getSignalStrengths(registers) {
 }
 
 // PART 1
-const solver1 = S.pipe([
-  R.map(R.split(' ')),
-  computeRegisters,
-  getSignalStrengths,
-  R.sum,
-])
+const solver1 = S.pipe([R.map(R.split(' ')), computeRegisters, getSignalStrengths, R.sum])
 
 // PART 2
 function draw(registers) {
@@ -59,12 +54,6 @@ function draw(registers) {
   return crt
 }
 
-const solver2 = S.pipe([
-  R.map(R.split(' ')),
-  computeRegisters,
-  draw,
-  R.join('\n'),
-  R.concat('\n'),
-])
+const solver2 = S.pipe([R.map(R.split(' ')), computeRegisters, draw, R.join('\n'), R.concat('\n')])
 
 export const solvers = [solver1, solver2]

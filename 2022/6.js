@@ -7,8 +7,7 @@ function findStartPacketIndex(str) {
     const b = str[i - 1]
     const c = str[i - 2]
     const d = str[i - 3]
-    if (a !== b && a !== c && a !== d && b !== c && b !== d && c !== d)
-      return i + 1
+    if (a !== b && a !== c && a !== d && b !== c && b !== d && c !== d) return i + 1
   }
   throw new Error('No starting packet was found!')
 }

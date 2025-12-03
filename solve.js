@@ -19,9 +19,7 @@ if (year === undefined) {
 }
 
 const filePath = `./${year}/${day}.js`
-const { solvers, parser = (x) => x.split('\n').slice(0, -1) } = await import(
-  filePath
-)
+const { solvers, parser = (x) => x.split('\n').slice(0, -1) } = await import(filePath)
 
 const input = readFileSync(join(__dirname, year, `${day}_input`)).toString()
 

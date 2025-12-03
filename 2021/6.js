@@ -7,11 +7,7 @@ const input = readInput('./6_input', ',')
 
 const calculateOffspring = (totalDays) => (timerStart) => {
   let fishCount = 1
-  for (
-    let daysLeft = totalDays, timer = timerStart;
-    daysLeft >= 0;
-    daysLeft -= 1, timer -= 1
-  ) {
+  for (let daysLeft = totalDays, timer = timerStart; daysLeft >= 0; daysLeft -= 1, timer -= 1) {
     if (timer < 0) {
       // time to spawn!
       fishCount += calculateOffspring(daysLeft)(8)
