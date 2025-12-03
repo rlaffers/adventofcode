@@ -11,6 +11,7 @@
   "scripts": {
     "gen": "bun run create.js",
     "solve": "bun run solve.js",
+    "format": "prettier --write .",
     "postinstall": "curl https://bun.sh/install | bash"
   },
   "dependencies": {

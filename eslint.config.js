@@ -4,18 +4,23 @@ import { defineConfig } from 'eslint/config'
 import stylistic from '@stylistic/eslint-plugin'
 
 export default defineConfig([
+  js.configs.recommended,
+  stylistic.configs.customize({
+    indent: 2,
+    quotes: 'single',
+    semi: false,
+    jsx: false,
+  }),
   {
     files: ['**/*.{js,mjs,cjs}'],
-    plugins: { js },
-    extends: ['js/recommended'],
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
     rules: {
       'no-unused-vars': 0,
-    },
-  },
-  {
-    plugins: {
-      '@stylistic': stylistic,
+      '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: true }],
     },
   },
 ])

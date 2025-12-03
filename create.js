@@ -21,7 +21,7 @@ if (year === undefined) {
 
 const dir = join(__dirname, year)
 try {
-  const result = await access(dir, constants.F_OK | constants.W_OK)
+  await access(dir, constants.F_OK | constants.W_OK)
 } catch (err) {
   if (err && err.code === 'ENOENT') {
     console.log(`Creating directory ${year}/`)
