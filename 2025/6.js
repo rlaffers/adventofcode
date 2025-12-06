@@ -2,19 +2,41 @@ import * as R from 'ramda'
 import S from 'sanctuary'
 
 // PART 1
+// const solver1 = S.pipe([
+//   R.map(S.pipe([R.split(' '), R.filter(Boolean)])),
+//   R.transpose,
+//   R.map((problem) => {
+//     const op = R.last(problem)
+//     const numbers = S.pipe([R.init, R.map(Number)])(problem)
+//     if (op === '+') return R.sum(numbers)
+//     return R.reduce(R.multiply, R.head(numbers), R.tail(numbers))
+//   }),
+//   R.sum,
+// ])
+
+const lift2 = (f) => (g) => (h) => (x) => f(g(x))(h(x))
+
+// 🔥 This is equivalent to the above
 const solver1 = S.pipe([
   R.map(S.pipe([R.split(' '), R.filter(Boolean)])),
   R.transpose,
-  R.map((problem) => {
-    const op = R.last(problem)
-    const numbers = S.pipe([R.init, R.map(Number)])(problem)
-    if (op === '+') return R.sum(numbers)
-    return R.reduce(R.multiply, R.head(numbers), R.tail(numbers))
-  }),
+  R.map(
+    // lift2((op) => (nums) => op === '+' ? R.sum(nums) : R.reduce(R.multiply, 1, nums))(R.last)(
+    //   S.pipe([R.init, R.map(Number)]),
+    // ),
+
+    R.converge(
+      (nums, op) => (op === '+' ? R.sum(nums) : R.reduce(R.multiply, 1, nums)),
+      [S.pipe([R.init, R.map(Number)]), R.last],
+    ),
+  ),
   R.sum,
 ])
 
+// --------------------- PART 2 ----------------------------
+
 const splitByWidths = (widths) => (str) => {
+  Function
   const chunks = []
   let chunk = ''
   let wIdx = 0
